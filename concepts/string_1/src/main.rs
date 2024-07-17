@@ -13,6 +13,11 @@ fn mut_cut_string(s: &mut String, start:i32, end:i32) -> String {
     s.to_string()
 }
 
+fn split_string(s: &str, delimiter: char, field:usize) -> String {
+    let parts: Vec<&str> = s.split(delimiter).collect();
+    parts.get(field).expect("no such part").to_string()
+}
+
 fn main() {
     let str_1 = "Hello, world!";
     println!("{}", cut_string(str_1, 2, 5));
@@ -23,4 +28,13 @@ fn main() {
     println!("{}", mut_cut_string(&mut str_2, 2, 10));
 
     println!("After mutable cutting: {}", str_2);
+
+    println!("::::::::::::::{}:::::::::::::::::","part 2");
+
+    let chunk = split_string(&str_1, ',',1);
+    println!("Second part: {}", chunk);
+    let chunk = split_string(&str_1, ',',0);
+    println!("First part: {}", chunk);
+    let chunk = split_string(&str_1, ',',2);
+    println!("Invalid part: {:?}", chunk);
 }
