@@ -15,13 +15,14 @@ fn own_string(string: String)->(){
     print_footer();
 }
 
-fn own_vector(vector: Vec<i32>)->(){
+fn own_vector(vector:Vec<i32>)->(){
     print_header();
     println!("Borrowed vector {:?}",vector);
     print_footer();
 }
+
 fn main() {
-    let mut my_vect = vec![1, 2, 3, 4, 5];
+    let my_vect = vec![1, 2, 3, 4, 5];
     let my_int = 6;
     let my_string = String::from("Hello, world!");
 
