@@ -3,8 +3,13 @@ use std::io::{BufRead, BufReader, ErrorKind};
 
 fn try_to_read(file_name: &str) {
     let file = File::open(file_name);
-    let file = match file {
-        Ok(file) => file,
+    match file {
+        Ok(file) => {
+            let reader = BufReader::new(file);
+            for line in reader.lines() {
+                println!("{}", line.unwrap());
+            }
+        },
         Err(error) => match error.kind() {
             ErrorKind::NotFound => {
                 println!("File not found: {}", file_name);
@@ -16,11 +21,6 @@ fn try_to_read(file_name: &str) {
             }
         },
     };
-
-    let reader = BufReader::new(file);
-    for line in reader.lines() {
-        println!("{}", line.unwrap());
-    }
 
 }
 fn main() {
