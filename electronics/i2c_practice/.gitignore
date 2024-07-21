@@ -1,0 +1,3 @@
+rust_jupyter_env/**
+target/
+.ipynb_checkpoints/**
