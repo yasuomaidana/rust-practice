@@ -7,7 +7,7 @@ pub type Kernel = Vec<Vec<f64>>;
 /// neighbors.
 
 pub trait KernelConstructors {
-    fn identity() -> Self;
+    // fn identity() -> Self;
     fn blur(blurring_intensity: f64) -> Self;
     // fn gaussian(size: usize, sigma: f64) -> Self;
     // fn edge_x() -> Self;
@@ -19,13 +19,13 @@ pub trait KernelConstructors {
 }
 
 impl KernelConstructors for Kernel {
-    fn identity() -> Self {
-        vec![
-            vec![0.0, 0.0, 0.0],
-            vec![0.0, 1.0, 0.0],
-            vec![0.0, 0.0, 0.0],
-        ]
-    }
+    // fn identity() -> Self {
+    //     vec![
+    //         vec![0.0, 0.0, 0.0],
+    //         vec![0.0, 1.0, 0.0],
+    //         vec![0.0, 0.0, 0.0],
+    //     ]
+    // }
 
     /// Constructs a blurring kernel with uniform intensity.
     ///

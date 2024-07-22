@@ -1,8 +1,8 @@
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
     // generic errors
-    #[error("Generic {0}")]
-    Generic(String),
+    // #[error("Generic {0}")]
+    // Generic(String),
 
     // for io errors
     #[error(transparent)]
