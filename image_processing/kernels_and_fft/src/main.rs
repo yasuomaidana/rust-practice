@@ -5,8 +5,10 @@ mod kernel;
 
 mod error;
 mod padding;
+mod convolve;
 
 use image::{GenericImageView, GrayImage};
+use crate::kernel::{Kernel, KernelConstructors};
 use crate::padding::reflection_pad;
 
 struct ColorScale {
@@ -142,6 +144,9 @@ fn main() -> std::result::Result<(), Error> {
     let new_width = padded_img[0].len() as u32;
     save_img(new_width, new_height, "cat_gray_padded.jpg", &padded_img)?;
 
+    let kernel = Kernel::blur(2.0);
+    let convolved_img = convolve::conv_2d(&img, &kernel);
+    save_img(width, height, "cat_gray_blurred.jpg", &convolved_img)?;
     return Ok(());
 
 }
