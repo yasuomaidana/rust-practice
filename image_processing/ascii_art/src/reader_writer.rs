@@ -1,5 +1,5 @@
 use crate::prelude::*;
-use crate::ColorScale;
+use crate::color_scale::ColorScale;
 
 
 use image::{GenericImageView, GrayImage};
@@ -33,7 +33,7 @@ use image::{GenericImageView, GrayImage};
 ///     // Use `gray_img` for further processing...
 /// }
 /// ```
-fn read_image_single_channel(image_name: &str, rgb_gray_scale: &ColorScale) -> Result<(u32, u32, Vec<Vec<f64>>)> {
+pub(crate) fn read_image_single_channel(image_name: &str, rgb_gray_scale: &ColorScale) -> Result<(u32, u32, Vec<Vec<f64>>)> {
     // read the image
     let img = image::open(image_name)?;
 
@@ -73,7 +73,7 @@ fn read_image_single_channel(image_name: &str, rgb_gray_scale: &ColorScale) -> R
 ///
 /// A `Result` containing a tuple with the image's width and height (in pixels) and the 3D vector
 /// of RGB values. Returns an error if the image cannot be opened or read.
-fn read_image_rgb(image_name: &str) -> Result<(u32, u32, Vec<Vec<[f64; 3]>>)> {
+pub(crate) fn read_image_rgb(image_name: &str) -> Result<(u32, u32, Vec<Vec<[f64; 3]>>)> {
     let img = image::open(image_name)?;
 
     let (width, height) = img.dimensions();
@@ -119,7 +119,7 @@ fn read_image_rgb(image_name: &str) -> Result<(u32, u32, Vec<Vec<[f64; 3]>>)> {
 /// let img = vec![vec![0.5; 100]; 100]; // A 100x100 image with all pixels at 50% intensity
 /// save_img(100, 100, "path/to/save_image.png", &img).expect("Failed to save image");
 /// ```
-fn save_img(width: u32, height: u32, image_name: &str, img: &Vec<Vec<f64>>) -> Result<()> {
+pub(crate) fn save_img(width: u32, height: u32, image_name: &str, img: &Vec<Vec<f64>>) -> Result<()> {
     // convert to grey image
     let mut ouput = GrayImage::new(width, height);
     for (x, y, pixel) in ouput.enumerate_pixels_mut() {
