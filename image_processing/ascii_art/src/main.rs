@@ -17,6 +17,7 @@ mod ascii_painter;
 fn calculate_image_dimensions(strings: &Vec<Vec<&str>>, font: &Font, scale: Scale) -> (u32, u32) {
     let mut max_width = 0.0f32;
     let mut total_height = 0.0f32;
+    let spacing_x = 10.0f32; // Horizontal spacing between text blocks
 
     for row in strings {
         let mut row_width = 0.0f32;
@@ -24,12 +25,14 @@ fn calculate_image_dimensions(strings: &Vec<Vec<&str>>, font: &Font, scale: Scal
 
         for &text in row {
             let (text_width, text_height) = calculate_text_dimensions(text, font, scale);
-            row_width += text_width;
+
+            row_width += text_width + spacing_x;
+
             row_height = row_height.max(text_height);
         }
 
         max_width = max_width.max(row_width);
-        total_height += row_height;
+        total_height += row_height ;
     }
 
     (max_width as u32, total_height as u32)
@@ -56,7 +59,7 @@ fn create_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: &Vec<Vec<f
     let (height,width ) = calculate_image_dimensions(&strings, &font, scale);
 
     let mut image = ImageBuffer::<Rgb<u8>, Vec<u8>>::new(
-        width, height);
+        height,width);
 
     for (y, row) in strings.iter().enumerate() {
         for (x, &text) in row.iter().enumerate() {
@@ -96,7 +99,7 @@ fn draw_glyph(image: &mut ImageBuffer<Rgb<u8>, Vec<u8>>, glyph: &PositionedGlyph
 
 fn main() -> Result<(), Error> {
 
-    let name = "Sign";
+    let name = "T3";
     let file_name = format!("{}.jpg", name);
     let reduced_name = format!("{}_reduced.jpg", name);
     let ascii_name = format!("{}_ascii.jpg", name);
@@ -104,7 +107,7 @@ fn main() -> Result<(), Error> {
     let (_, _, color_scaled_image) =  read_image_single_channel(file_name.as_str(),
                                                                          &color_scale::ColorScale::new(0.2989, 0.587, 0.114))?;
 
-    let reduced_image = reduce_image_by_sampling(&color_scaled_image, 2);
+    let reduced_image = reduce_image_by_sampling(&color_scaled_image, 8);
     let (reduced_width, reduced_height) = (reduced_image[0].len(), reduced_image.len());
     save_img(reduced_width as u32, reduced_height as u32, reduced_name.as_str(), &reduced_image)?;
 
