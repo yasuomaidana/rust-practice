@@ -4,9 +4,10 @@ use crate::prelude::*;
 mod kernel;
 
 mod error;
+mod padding;
 
 use image::{GenericImageView, GrayImage};
-
+use crate::padding::reflection_pad;
 
 struct ColorScale {
     r_scale: f64,
@@ -136,6 +137,11 @@ fn main() -> std::result::Result<(), Error> {
     let color_scale = ColorScale::new(0.2989, 0.587, 0.114);
     let (width, height, img) = read_image("Cat.jpg", &color_scale)?;
     save_img(width, height, "cat_gray.jpg", &img)?;
+    let padded_img = reflection_pad(&img, 3);
+    let new_height = padded_img.len() as u32;
+    let new_width = padded_img[0].len() as u32;
+    save_img(new_width, new_height, "cat_gray_padded.jpg", &padded_img)?;
+
     return Ok(());
 
 }
