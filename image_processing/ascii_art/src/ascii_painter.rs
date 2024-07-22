@@ -14,7 +14,7 @@ pub fn reduce_image_by_sampling(image: &Vec<Vec<f64>>, scale: usize) -> Vec<Vec<
     let original_width = if !image.is_empty() { image[0].len() } else { 0 };
 
     // Calculate new dimensions based on the sampling condition
-    let new_height = original_height / (scale * 2);
+    let new_height = original_height / scale ;
     let new_width = original_width / scale;
 
     let mut reduced_image = vec![vec![0.0; new_width]; new_height];
