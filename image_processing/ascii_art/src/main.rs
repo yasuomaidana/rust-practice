@@ -48,16 +48,19 @@ fn calculate_text_dimensions(text: &str, font: &Font, scale: Scale) -> (f32, f32
     (width, height)
 }
 
-fn create_grayscale_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: &Vec<Vec<f64>>, filename: &str, font_size: f32) {
+fn create_grayscale_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: &Vec<Vec<f64>>, filename: &str, font_size: f32,
+                                    separation_ratio: f32) {
+
     let font_data = include_bytes!("DejaVuSans.ttf") as &[u8]; // Load the font data
     let font = Font::try_from_bytes(font_data).expect("Error constructing Font");
 
     let scale = Scale::uniform(font_size); // Set the scale for the font
 
+    let divider = separation_ratio as u32;
     let (height,width ) = calculate_image_dimensions(&strings, &font, scale);
 
     let mut image = ImageBuffer::<Rgb<u8>, Vec<u8>>::new(
-        height,width);
+        height/divider,width/divider);
 
     for (y, row) in strings.iter().enumerate() {
         for (x, &text) in row.iter().enumerate() {
@@ -65,7 +68,7 @@ fn create_grayscale_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: 
             let rgb_value = (color_value * 255.0) as u8;
             let color = Rgb([rgb_value, rgb_value, rgb_value]);
 
-            let glyphs = layout_text(&font, scale, text, x, y);
+            let glyphs = layout_text(&font, scale, text, x, y, separation_ratio);
 
             for glyph in glyphs {
                 draw_glyph(&mut image, &glyph, color);
@@ -77,7 +80,8 @@ fn create_grayscale_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: 
 }
 
 
-fn create_color_image_with_text(strings: &Vec<Vec<&str>>, color_image: &Vec<Vec<[f64; 3]>>, filename: &str, font_size: f32) {
+fn create_color_image_with_text(strings: &Vec<Vec<&str>>, color_image: &Vec<Vec<[f64; 3]>>, filename: &str, font_size: f32
+, space_ration: f32) {
     let font_data = include_bytes!("DejaVuSans.ttf") as &[u8]; // Load the font data
     let font = Font::try_from_bytes(font_data).expect("Error constructing Font");
 
@@ -85,8 +89,9 @@ fn create_color_image_with_text(strings: &Vec<Vec<&str>>, color_image: &Vec<Vec<
 
     let (height,width ) = calculate_image_dimensions(&strings, &font, scale);
 
+    let divider = space_ration as u32;
     let mut image = ImageBuffer::<Rgb<u8>, Vec<u8>>::new(
-        height,width);
+        height/divider,width/divider);
 
     for (y, row) in strings.iter().enumerate() {
         for (x, &text) in row.iter().enumerate() {
@@ -97,7 +102,7 @@ fn create_color_image_with_text(strings: &Vec<Vec<&str>>, color_image: &Vec<Vec<
             let color = Rgb([red, green, blue]);
 
 
-            let glyphs = layout_text(&font, scale, text, x, y);
+            let glyphs = layout_text(&font, scale, text, x, y, space_ration);
 
             for glyph in glyphs {
                 draw_colored_glyph(&mut image, &glyph, color);
@@ -108,8 +113,8 @@ fn create_color_image_with_text(strings: &Vec<Vec<&str>>, color_image: &Vec<Vec<
     image.save(filename).expect("Failed to save the image");
 }
 
-fn layout_text<'a>(font: &'a Font, scale: Scale, text: &str, x: usize, y: usize) -> Vec<PositionedGlyph<'a>> {
-    let start = point(scale.x + x as f32 * scale.x, scale.y + y as f32 * scale.y); // Adjust starting position as needed
+fn layout_text<'a>(font: &'a Font, scale: Scale, text: &str, x: usize, y: usize, separation_ratio:f32) -> Vec<PositionedGlyph<'a>> {
+    let start = point(scale.x + x as f32 * scale.x/separation_ratio, scale.y + y as f32 * scale.y/separation_ratio); // Adjust starting position as needed
     font.layout(text, scale, start).collect()
 }
 
@@ -146,7 +151,7 @@ fn draw_colored_glyph(image: &mut ImageBuffer<Rgb<u8>, Vec<u8>>, glyph: &Positio
 
 fn main() -> Result<(), Error> {
 
-    let name = "T6";
+    let name = "T3";
     let image_type = "jpg";
     let file_name = format!("{name}.{image_type}");
     let reduced_name = format!("{name}_reduced.{image_type}");
@@ -154,6 +159,7 @@ fn main() -> Result<(), Error> {
     let color_ascii_name = format!("{name}_color_ascii.{image_type}");
     let reduced_scale = 8;
     let font_size = 40.0;
+    let separation_ratio = 2.0;
 
     let (_, _, color_scaled_image) =  read_image_single_channel(file_name.as_str(),
                                                                          &color_scale::ColorScale::new(0.2989, 0.587, 0.114))?;
@@ -167,12 +173,12 @@ fn main() -> Result<(), Error> {
     let ascii_image = to_ascii_image(&reduced_image);
     // ascii_image = reduce_image_by_sampling(&ascii_image, reduced_scale);
 
-    create_grayscale_image_with_text(&ascii_image, &reduced_image, ascii_name.as_str(), font_size);
+    create_grayscale_image_with_text(&ascii_image, &reduced_image, ascii_name.as_str(), font_size, separation_ratio);
     println!("Image saved as {}", ascii_name);
 
     let (_,_,colored_image) = read_image_rgb(file_name.as_str())?;
     let reduced_colored = reduce_image_by_sampling(&colored_image, reduced_scale);
-    create_color_image_with_text(&ascii_image, &reduced_colored, color_ascii_name.as_str(), font_size);
+    create_color_image_with_text(&ascii_image, &reduced_colored, color_ascii_name.as_str(), font_size, separation_ratio);
     println!("Colored image {}", color_ascii_name);
     Ok(())
 }
