@@ -103,6 +103,7 @@ fn main() -> Result<(), Error> {
     let reduced_name = format!("{name}_reduced.{image_type}");
     let ascii_name = format!("{name}_ascii.{image_type}");
     let reduced_scale = 8;
+    let font_size = 40.0;
 
     let (_, _, color_scaled_image) =  read_image_single_channel(file_name.as_str(),
                                                                          &color_scale::ColorScale::new(0.2989, 0.587, 0.114))?;
@@ -116,7 +117,7 @@ fn main() -> Result<(), Error> {
     let ascii_image = to_ascii_image(&reduced_image);
     // ascii_image = reduce_image_by_sampling(&ascii_image, reduced_scale);
 
-    create_grayscale_image_with_text(&ascii_image, &reduced_image, ascii_name.as_str(), 20.0);
+    create_grayscale_image_with_text(&ascii_image, &reduced_image, ascii_name.as_str(), font_size);
     println!("Image saved as {}", ascii_name);
     // for row in ascii_image {
     //     for pixel in row {
@@ -124,5 +125,6 @@ fn main() -> Result<(), Error> {
     //     }
     //     println!();
     // }
+    create_color_image_with_text(&ascii_image, &reduced_colored, color_ascii_name.as_str(), font_size);
     Ok(())
 }
