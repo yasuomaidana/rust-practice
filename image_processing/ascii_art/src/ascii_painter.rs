@@ -9,7 +9,7 @@ pub fn to_ascii_image(image: &Vec<Vec<f64>>) -> Vec<Vec<&'static str>> {
 }
 
 
-pub fn reduce_image_by_sampling(image: &Vec<Vec<f64>>, scale: usize) -> Vec<Vec<f64>> {
+pub fn reduce_image_by_sampling<T: Clone>(image: &Vec<Vec<T>>, scale: usize) -> Vec<Vec<T>> {
     let original_height = image.len();
     let original_width = if !image.is_empty() { image[0].len() } else { 0 };
 
@@ -17,12 +17,12 @@ pub fn reduce_image_by_sampling(image: &Vec<Vec<f64>>, scale: usize) -> Vec<Vec<
     let new_height = original_height / scale;
     let new_width = original_width / scale;
 
-    let mut reduced_image = vec![vec![0.0; new_width]; new_height];
+    let mut reduced_image = vec![vec![image[0][0].clone(); new_width]; new_height];
 
-    for (new_y, y) in (0..original_height).filter(|&y| y % scale  == 0).enumerate() {
+    for (new_y, y) in (0..original_height).filter(|&y| y % scale == 0).enumerate() {
         for (new_x, x) in (0..original_width).filter(|&x| x % scale == 0).enumerate() {
             if new_y < new_height && new_x < new_width {
-                reduced_image[new_y][new_x] = image[y][x];
+                reduced_image[new_y][new_x] = image[y][x].clone();
             }
         }
     }
