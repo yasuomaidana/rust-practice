@@ -48,7 +48,7 @@ fn calculate_text_dimensions(text: &str, font: &Font, scale: Scale) -> (f32, f32
     (width, height)
 }
 
-fn create_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: &Vec<Vec<f64>>, filename: &str, font_size: f32) {
+fn create_grayscale_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: &Vec<Vec<f64>>, filename: &str, font_size: f32) {
     let font_data = include_bytes!("DejaVuSans.ttf") as &[u8]; // Load the font data
     let font = Font::try_from_bytes(font_data).expect("Error constructing Font");
 
@@ -97,22 +97,26 @@ fn draw_glyph(image: &mut ImageBuffer<Rgb<u8>, Vec<u8>>, glyph: &PositionedGlyph
 
 fn main() -> Result<(), Error> {
 
-    let name = "Yo";
-    let file_name = format!("{}.jpg", name);
-    let reduced_name = format!("{}_reduced.jpg", name);
-    let ascii_name = format!("{}_ascii.jpg", name);
+    let name = "Grafity";
+    let image_type = "jpg";
+    let file_name = format!("{name}.{image_type}");
+    let reduced_name = format!("{name}_reduced.{image_type}");
+    let ascii_name = format!("{name}_ascii.{image_type}");
+    let reduced_scale = 8;
 
     let (_, _, color_scaled_image) =  read_image_single_channel(file_name.as_str(),
                                                                          &color_scale::ColorScale::new(0.2989, 0.587, 0.114))?;
 
-    let reduced_image = reduce_image_by_sampling(&color_scaled_image, 16);
+    let reduced_image = reduce_image_by_sampling(&color_scaled_image, reduced_scale);
     let (reduced_width, reduced_height) = (reduced_image[0].len(), reduced_image.len());
     save_img(reduced_width as u32, reduced_height as u32, reduced_name.as_str(), &reduced_image)?;
 
     println!("Reduced image saved as {}", reduced_name);
 
     let ascii_image = to_ascii_image(&reduced_image);
-    create_image_with_text(&ascii_image, &reduced_image, ascii_name.as_str(), 32.0);
+    // ascii_image = reduce_image_by_sampling(&ascii_image, reduced_scale);
+
+    create_grayscale_image_with_text(&ascii_image, &reduced_image, ascii_name.as_str(), 20.0);
     println!("Image saved as {}", ascii_name);
     // for row in ascii_image {
     //     for pixel in row {
