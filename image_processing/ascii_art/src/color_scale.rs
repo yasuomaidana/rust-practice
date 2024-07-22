@@ -1,7 +1,7 @@
-struct ColorScale {
-    r_scale: f64,
-    g_scale: f64,
-    b_scale: f64,
+pub(crate) struct ColorScale {
+    pub r_scale: f64,
+    pub g_scale: f64,
+    pub b_scale: f64,
 }
 
 impl ColorScale {
