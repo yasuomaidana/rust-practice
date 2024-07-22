@@ -3,6 +3,7 @@ use image::{ImageBuffer, Luma, Rgb, RgbImage};
 use crate::ascii_painter::{reduce_image_by_sampling, to_ascii_image};
 use crate::error::Error;
 use crate::reader_writer::{read_image_single_channel, save_img};
+use rusttype::{Font, Scale, point, PositionedGlyph};
 
 mod reader_writer;
 mod error;
@@ -11,18 +12,51 @@ mod color_scale;
 mod kernel;
 mod ascii_painter;
 
-struct Font(Vec<u8>);
-
-
-
-
 
 fn create_image_with_text(strings: &Vec<Vec<&str>>, gray_scale_color: &Vec<Vec<f64>>, filename: &str) {
-    let font_data = include_bytes!("DejaVuSans.ttf");
-    let font = Font(font_data.to_vec());
+    let font_data = include_bytes!("DejaVuSans.ttf") as &[u8]; // Load the font data
+    let font = Font::try_from_bytes(font_data).expect("Error constructing Font");
 
-    // Implementation for using the font, grayscale values, and filename to create an image
-    // This part of the code is not provided but would go here.
+    let scale = Scale::uniform(24.0); // Set the scale for the font
+    let width = 18000u32; // Set your desired image width
+    let height = 16000u32; // Set your desired image height
+
+    let mut image = ImageBuffer::<Rgb<u8>, Vec<u8>>::new(width, height);
+
+    for (y, row) in strings.iter().enumerate() {
+        for (x, &text) in row.iter().enumerate() {
+            let color_value = gray_scale_color[y][x];
+            let rgb_value = (color_value * 255.0) as u8;
+            let color = Rgb([rgb_value, rgb_value, rgb_value]);
+
+            let glyphs = layout_text(&font, scale, text, x, y);
+
+            for glyph in glyphs {
+                draw_glyph(&mut image, &glyph, color);
+            }
+        }
+    }
+
+    image.save(filename).expect("Failed to save the image");
+}
+
+fn layout_text<'a>(font: &'a Font, scale: Scale, text: &str, x: usize, y: usize) -> Vec<PositionedGlyph<'a>> {
+    let start = point(10.0 + x as f32 * 60.0, 30.0 + y as f32 * 60.0); // Adjust starting position as needed
+    font.layout(text, scale, start).collect()
+}
+
+fn draw_glyph(image: &mut ImageBuffer<Rgb<u8>, Vec<u8>>, glyph: &PositionedGlyph, color: Rgb<u8>) {
+    if let Some(bounding_box) = glyph.pixel_bounding_box() {
+        glyph.draw(|gx, gy, gv| {
+            let x = gx + bounding_box.min.x as u32;
+            let y = gy + bounding_box.min.y as u32;
+            if x < image.width() && y < image.height() {
+                let pixel = image.get_pixel_mut(x, y);
+                let blend = (gv * color[0] as f32) as u8;
+                *pixel = Rgb([blend, blend, blend]);
+            }
+        });
+    }
 }
 
 fn main() -> Result<(), Error> {
