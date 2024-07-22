@@ -93,10 +93,49 @@ fn read_image(image_name: &str, rgb_gray_scale: &ColorScale) -> Result<((u32, u3
 }
 
 
+/// Saves a grayscale image to a file.
+///
+/// This function takes a 2D vector representing a grayscale image, where each element is a
+/// floating-point number between 0.0 and 1.0 indicating the intensity of a pixel, and saves
+/// this image to a file. The function converts these floating-point values to 8-bit integers
+/// (0-255 scale) and constructs a `GrayImage` before saving it to the specified path.
+///
+/// # Arguments
+///
+/// * `width` - The width of the image in pixels.
+/// * `height` - The height of the image in pixels.
+/// * `image_name` - The path and name of the file where the image will be saved.
+/// * `img` - A reference to a 2D vector of `f64` representing the grayscale values of the image.
+///
+/// # Returns
+///
+/// A `Result` indicating the success or failure of the save operation. On success, it returns `Ok(())`.
+///
+/// # Examples
+///
+/// ```
+/// let img = vec![vec![0.5; 100]; 100]; // A 100x100 image with all pixels at 50% intensity
+/// save_img(100, 100, "path/to/save_image.png", &img).expect("Failed to save image");
+/// ```
+fn save_img(width: u32, height: u32, image_name: &str, img: &Vec<Vec<f64>>) -> Result<()> {
+    // convert to grey image
+    let mut ouput = GrayImage::new(width, height);
+    for (x, y, pixel) in ouput.enumerate_pixels_mut() {
+        let gray_value = (img[y as usize][x as usize] * 255.0) as u8;
+        *pixel = image::Luma([gray_value]);
+    }
 
-fn main() {
-    println!("Hello, world!");
+    // save the image
+    ouput.save(image_name)?;
+
+    return Ok(());
+}
+
+fn main() -> std::result::Result<(), Error> {
+    println!("Cat to grayscale");
     let color_scale = ColorScale::new(0.2989, 0.587, 0.114);
-    let image = read_image("Cat.jpg", &color_scale);
+    let (width, height, img) = read_image("Cat.jpg", &color_scale)?;
+    save_img(width, height, "cat_gray.jpg", &img)?;
+    return Ok(());
 
 }
