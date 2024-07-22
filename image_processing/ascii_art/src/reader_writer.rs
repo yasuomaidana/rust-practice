@@ -73,27 +73,27 @@ pub(crate) fn read_image_single_channel(image_name: &str, rgb_gray_scale: &Color
 ///
 /// A `Result` containing a tuple with the image's width and height (in pixels) and the 3D vector
 /// of RGB values. Returns an error if the image cannot be opened or read.
-// pub(crate) fn read_image_rgb(image_name: &str) -> Result<(u32, u32, Vec<Vec<[f64; 3]>>)> {
-//     let img = image::open(image_name)?;
-//
-//     let (width, height) = img.dimensions();
-//
-//     let mut rgb_img = vec![vec![[0.0; 3]; width as usize]; height as usize];
-//
-//     for y in 0..height {
-//         for x in 0..width {
-//             let pixel = img.get_pixel(x, y);
-//             let rgb = pixel.0;
-//             rgb_img[y as usize][x as usize] = [
-//                 rgb[0] as f64,
-//                 rgb[1] as f64,
-//                 rgb[2] as f64,
-//             ];
-//         }
-//     }
-//
-//     Ok((width, height, rgb_img))
-// }
+pub(crate) fn read_image_rgb(image_name: &str) -> Result<(u32, u32, Vec<Vec<[f64; 3]>>)> {
+    let img = image::open(image_name)?;
+
+    let (width, height) = img.dimensions();
+
+    let mut rgb_img = vec![vec![[0.0; 3]; width as usize]; height as usize];
+
+    for y in 0..height {
+        for x in 0..width {
+            let pixel = img.get_pixel(x, y);
+            let rgb = pixel.0;
+            rgb_img[y as usize][x as usize] = [
+                rgb[0] as f64,
+                rgb[1] as f64,
+                rgb[2] as f64,
+            ];
+        }
+    }
+
+    Ok((width, height, rgb_img))
+}
 
 /// Saves a grayscale image to a file.
 ///
