@@ -69,7 +69,7 @@ impl ColorScale {
 ///     // Use `gray_img` for further processing...
 /// }
 /// ```
-fn read_image(image_name: &str, rgb_gray_scale: &ColorScale) -> Result<((u32, u32, Vec<Vec<f64>>))> {
+fn read_image(image_name: &str, rgb_gray_scale: &ColorScale) -> Result<(u32, u32, Vec<Vec<f64>>)> {
     // read the image
     let img = image::open(image_name)?;
 
