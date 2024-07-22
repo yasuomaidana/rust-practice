@@ -132,3 +132,10 @@ pub(crate) fn save_img(width: u32, height: u32, image_name: &str, img: &Vec<Vec<
 
     return Ok(());
 }
+
+pub fn get_image_size(image_array: &Vec<Vec<f64>>) -> (u32, u32) {
+    let height = image_array.len() as u32;
+    let width = if !image_array.is_empty() { image_array[0].len() as u32 } else { 0 };
+
+    (width, height)
+}
