@@ -12,7 +12,7 @@ pub trait KernelConstructors {
     // fn gaussian(size: usize, sigma: f64) -> Self;
     // fn edge_x() -> Self;
     // fn edge_y() -> Self;
-    // fn edge_all() -> Self;
+    fn edge_all() -> Self;
     // fn sharpen() -> Self;
     // fn emboss() -> Self;
     // fn edge_enhance() -> Self;
@@ -81,9 +81,13 @@ impl KernelConstructors for Kernel {
     //     todo!()
     // }
     //
-    // fn edge_all() -> Self {
-    //     todo!()
-    // }
+    fn edge_all() -> Self {
+        vec![
+            vec![0.0, 1.0, 0.0],
+            vec![1.0, -4.0, 1.0],
+            vec![0.0, 1.0, 0.0],
+        ]
+    }
     //
     // fn sharpen() -> Self {
     //     todo!()
