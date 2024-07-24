@@ -151,13 +151,13 @@ fn draw_colored_glyph(image: &mut ImageBuffer<Rgb<u8>, Vec<u8>>, glyph: &Positio
 
 fn main() -> Result<(), Error> {
 
-    let name = "T3";
+    let name = "Sign";
     let image_type = "jpg";
     let file_name = format!("{name}.{image_type}");
     let reduced_name = format!("{name}_reduced.{image_type}");
     let ascii_name = format!("{name}_gray_ascii.{image_type}");
     let color_ascii_name = format!("{name}_color_ascii.{image_type}");
-    let reduced_scale = 8;
+    let reduced_scale = 4;
     let font_size = 40.0;
     let separation_ratio = 2.0;
 
