@@ -1,0 +1,7 @@
+[package]
+name = "open_cv_reading_camera"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+opencv = "0.92.1"
