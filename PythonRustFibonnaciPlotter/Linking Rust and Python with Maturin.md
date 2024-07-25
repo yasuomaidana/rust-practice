@@ -36,7 +36,7 @@ fn fibonacci_lib(m: &Bound<'_, PyModule>) -> PyResult<()> {
 }
     
 ```
-** Step 4: ** Build the library. In the rust directory, run `maturin develop` to build the library and create a symbolic link to the python package.
+**Step 4:** Build the library. In the rust directory, run `maturin develop` to build the library and create a symbolic link to the python package.
 
 This command generates and install the rust library in the virtual environment, you could enhance perfomance by running `maturin develop --release` to build the library in release mode.
   
