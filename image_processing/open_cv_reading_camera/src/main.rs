@@ -14,8 +14,9 @@ fn main() -> Result<()> {
         cam.read(&mut frame)?;
         highgui::imshow("video", &frame)?;
         let key = highgui::wait_key(10)?;
-        if key == 113 {
-            break;
+        match key {
+            key if key == 'q' as i32 =>break,
+            _ => ()
         }
     }
     Ok(())
