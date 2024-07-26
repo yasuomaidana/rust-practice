@@ -10,8 +10,7 @@ mod prelude;
 mod color_scale;
 mod kernel;
 mod ascii_painter;
-
-
+mod ascii_processor;
 
 fn calculate_image_dimensions(strings: &Vec<Vec<&str>>, font: &Font, scale: Scale) -> (u32, u32) {
     let mut max_width = 0.0f32;
