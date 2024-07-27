@@ -23,4 +23,10 @@ fn main() {
     for speaker in living_speakers{
         speaker.make_sound();
     }
+
+    println!("Instantiating by names");
+    let status = LivingStatus{age: 0, is_alive: true};
+    let name = "Rambo".to_string();
+    let lion = Lion{status, name};
+    println!("Lion name is: {}", lion.get_name());
 }

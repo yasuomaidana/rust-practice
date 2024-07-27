@@ -5,8 +5,8 @@ pub(crate) struct LivingStatus{
 }
 
 pub(crate) struct Lion{
-    name: String,
-    status: LivingStatus
+    pub(crate) name: String,
+    pub(crate) status: LivingStatus
 }
 
 impl Lion {
