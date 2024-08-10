@@ -19,9 +19,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Split the poem into verses and store the last words of each sentence in a list
     let verses: Vec<Vec<&str>> = contents
         .split("\n")
-        .map(|verse| {
-            let words: Vec<&str> = re.captures_iter(verse).map(|caps| caps.get(1).map_or("",|m| m.as_str())).collect();
-            words
+        .map(|line| {
+             re.captures_iter(line)
+                 .map(|caps| caps.get(1).map_or("", |m| m.as_str()))
+                 .collect::<Vec<&str>>()
         })
         .fold(Vec::new(), |mut acc, words| {
             if words.is_empty() {
