@@ -1,8 +1,8 @@
+use regex::Regex;
 use std::error::Error;
 use std::fs::File;
 use std::io;
-use std::io::{Read};
-use regex::Regex;
+use std::io::Read;
 
 fn main() -> Result<(), Box<dyn Error>> {
     // Read the poem from a text file
@@ -10,8 +10,9 @@ fn main() -> Result<(), Box<dyn Error>> {
     let file = File::open(filename).expect("Could not open file");
     let mut reader = io::BufReader::new(file);
     let mut contents = String::new();
-    reader.read_to_string(&mut contents).expect("Could not read file");
-
+    reader
+        .read_to_string(&mut contents)
+        .expect("Could not read file");
 
     // Create a regex to match the last word of every sentence
     let re = Regex::new(r"\b(\w+)\b\W*$").expect("Could not create regex");
@@ -20,15 +21,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     let verses: Vec<Vec<&str>> = contents
         .split("\n")
         .map(|line| {
-             re.captures_iter(line)
-                 .map(|caps| caps.get(1).map_or("", |m| m.as_str()))
-                 .collect::<Vec<&str>>()
+            re.captures_iter(line)
+                .map(|caps| caps.get(1).map_or("", |m| m.as_str()))
+                .collect::<Vec<&str>>()
         })
         .fold(Vec::new(), |mut acc, words| {
             if words.is_empty() {
                 acc.push(Vec::new());
-            }
-            else{
+            } else {
                 if acc.is_empty() {
                     acc.push(Vec::new());
                 }
