@@ -1,4 +1,4 @@
-
+use file_reader::color_text::green;
 
 fn main() {
     let file = file_reader::TextFile::read_from_console();
@@ -6,5 +6,5 @@ fn main() {
     for line in lines {
         println!("{}", line);
     }
-    println!("Read file {}", file.get_file_name());
+    println!("Read file {}", green(file.get_file_name()));
 }
