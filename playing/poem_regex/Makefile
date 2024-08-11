@@ -45,5 +45,13 @@ format:
 	@rustup component add rustfmt
 	cargo fmt
 
+bump:
+	@echo "Bumping version..."
+	@echo "Current version: $(shell cargo pkgid | cut -d# -f2)"
+	@read -p "Enter new version: " version; \
+	updated_version=$$(cargo pkgid | cut -d#  -f2 | sed -E "s/([0-9]+\.[0-9]+\.[0-9]+)$$/$$version/"); \
+	sed -i -E "s/^version = .*/version = \"$$updated_version\"/" Cargo.toml
+	@echo "Updated version: $(shell cargo pkgid | cut -d# -f2)"
+
 # Set the COLOR variable to enable colored output
 COLOR ?= 1
