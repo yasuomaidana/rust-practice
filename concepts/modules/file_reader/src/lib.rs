@@ -2,7 +2,7 @@ use std::fs;
 use std::io::BufRead;
 
 
-pub mod color_text;
+
 
 pub struct TextFile {
     file_name: String,

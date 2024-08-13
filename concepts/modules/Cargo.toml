@@ -5,3 +5,4 @@ edition = "2021"
 
 [dependencies]
 file_reader = { path = "./file_reader" }
+color-string = {path = "./color-string"}

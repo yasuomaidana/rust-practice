@@ -3,6 +3,10 @@
 version = 3
 
 [[package]]
+name = "color-string"
+version = "0.1.0"
+
+[[package]]
 name = "file_reader"
 version = "0.1.0"
 
@@ -10,5 +14,6 @@ version = "0.1.0"
 name = "modules"
 version = "0.1.0"
 dependencies = [
+ "color-string",
  "file_reader",
 ]

@@ -1,4 +1,4 @@
-use file_reader::color_text::{blue, cyan, green, magenta, red, white, yellow};
+use color_string::color_text::{blue, cyan, green, magenta, red, white, yellow};
 
 fn main() {
     let file = file_reader::TextFile::read_from_console();
