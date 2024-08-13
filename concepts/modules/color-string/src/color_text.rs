@@ -23,6 +23,10 @@ pub fn formatter(color: &Color, text: &str) -> String {
     format!("\x1b[{}m{}\x1b[0m", code, text)
 }
 
+// pub fn bold(text: &str) -> String {
+//     format!("\x1b[1m{}\x1b[0m", text)
+// }
+
 pub fn reset(text: &str) -> String {
     formatter(&Color::Default, text)
 }

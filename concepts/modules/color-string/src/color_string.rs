@@ -16,4 +16,17 @@ impl ColorString {
             colorized
         }
     }
+
+    pub fn paint(&mut self) {
+        self.colorized = formatter(&self.color, &self.string);
+    }
+
+    pub fn reset(&mut self) {
+        self.colorized = formatter(&Color::Default, &self.string);
+    }
+
+    pub fn change_color(&mut self, color: Color) {
+        self.color = color;
+        self.paint();
+    }
 }
