@@ -1,3 +1,5 @@
+pub mod text_reader;
+
 use std::fs;
 use std::io::BufRead;
 
