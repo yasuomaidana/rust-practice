@@ -36,6 +36,6 @@ mod tests {
         let input = "Hello, world!\n";
         let cursor = Cursor::new(input);
         let mut reader = BufReader::new(cursor);
-        assert_eq!(_read_stdin(&mut reader), input.trim());
+        assert_eq!(_read_stdin(&mut reader), input.trim(), "Failed to read from stdin");
     }
 }
