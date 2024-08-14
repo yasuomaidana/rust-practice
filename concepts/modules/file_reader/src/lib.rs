@@ -29,11 +29,8 @@ impl TextFile {
     }
 
     pub fn read_from_console() -> TextFile {
-        let mut input = String::new();
         println!("Enter file name: ");
-        std::io::stdin()
-            .read_line(&mut input)
-            .expect("Failed to read line");
+        let input = text_reader::read_stdin();
         TextFile::new(input.trim())
     }
 
