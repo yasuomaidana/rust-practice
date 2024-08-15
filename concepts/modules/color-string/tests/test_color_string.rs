@@ -3,12 +3,12 @@ use color_string::color_text::Color;
 #[test]
 fn test_resetting_string_color() {
     let text = "Hello, world!";
-    let mut color_string = ColorString::new(Some(Color::Red), text);
-    // println!("{}", color_string.colorized);
-    // color_string.reset();
-    //
-    // println!("{}", color_string.colorized);
-    // assert_eq!(color_string.colorized, text);
+    let mut  color_string = ColorString::new(Some(Color::Red), text);
+    println!("{}", color_string.colorized);
+    color_string.reset();
+
+    println!("{}", color_string.colorized);
+    assert_eq!(color_string.colorized, text);
 }
 
 #[test]
