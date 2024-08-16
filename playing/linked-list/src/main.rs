@@ -8,7 +8,7 @@ use std::sync::mpsc::{Receiver, Sender};
 use std::thread::sleep;
 use std::time::Duration;
 use console::{Term, style};
-use crossterm::{event::{self, Event, KeyCode}, terminal::{ enable_raw_mode}};
+use crossterm::{event::{self, Event, KeyCode}, terminal::{enable_raw_mode}};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Open the audio file
@@ -18,7 +18,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let source = Decoder::new(reader).unwrap();
 
     // Create a message channel to communicate with the main thread
-    let (tx, rx): (Sender<()>, Receiver<()>) = mpsc::channel();
+    let (tx, rx): (Sender<char>, Receiver<char>) = mpsc::channel();
 
     // Get the output stream
     let (_stream, handle) = OutputStream::try_default().unwrap();
@@ -27,15 +27,27 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Play the audio in a separate thread
     std::thread::spawn(move || {
         sink.append(source);
-        sink.play();
+        // sink.play();
 
-        // Wait for the audio to finish playing before sending the signal
+        loop {
+            match rx.recv() {
+                Ok('p') => {
+                    if sink.is_paused() {
+                        sink.play();
+                    } else {
+                        sink.pause();
+                    }
+                }
+                Ok('q') | Err(_) => break,
+                _ => {}
+            }
+
+            if sink.empty() {
+                break;
+            }
+        }
+
         sink.sleep_until_end();
-        tx.send(()).unwrap(); // Signal the main thread that playback is finished
-
-
-
-
     });
 
     let term = Term::stdout();
@@ -45,11 +57,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     loop {
         // Poll for keyboard events
-        if let Event::Key(key) = event::read()? {
+        if let Event::Key(key) = event::read().unwrap() {
             // Check if the user pressed ESC
             if key.code == KeyCode::Char('q') {
                 println!("Keyboard Interrupt");
                 break;
+            }
+            if key.code == KeyCode::Char('p') {
+
+                if event::poll(Duration::from_millis(100)).unwrap() == true {
+                    continue;
+                }
+                tx.send('p').unwrap();
+
             }
             if key.code == KeyCode::Esc {
                 println!("Keyboard Interrupt");
@@ -69,9 +89,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         sleep(Duration::from_millis(500)); // Update every 500ms for smoother progress
 
         // Check if the audio has finished playing
-        if rx.try_recv().is_ok() {
-            break;
-        }
     }
 
     Ok(())
