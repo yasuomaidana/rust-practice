@@ -1,5 +1,11 @@
+use std::io;
+use std::io::Write;
+use std::time::Duration;
+use crossterm::event;
+use crossterm::event::{Event, KeyCode};
+use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
+use tokio::task;
 use crate::string_formatter::{color_string, Color};
-
 mod scrapper;
 mod cache_manager;
 mod model;
@@ -21,4 +27,40 @@ async fn main() {
         }
         i += 1;
     }
+
+
+    enable_raw_mode().unwrap();
+    let mut stdout = io::stdout();
+    writeln!(stdout, "Press 'q' to exit.").unwrap();
+    stdout.flush().unwrap();
+
+    task::spawn(async move {
+        loop {
+            if event::poll(std::time::Duration::from_millis(100)).unwrap() {
+                if let Event::Key(key_event) = event::read().unwrap() {
+                    match key_event.code {
+                        KeyCode::Char('q') => {
+                            writeln!(stdout, "Exiting...").unwrap();
+                            break;
+                        }
+                        KeyCode::Char(c) => {
+                            if event::poll(Duration::from_millis(500)).unwrap(){
+                                writeln!(stdout, "You pressed: {}", c).unwrap();
+                                continue;
+                            }
+                        }
+                        KeyCode::Esc => {
+                            writeln!(stdout, "Exiting...").unwrap();
+                            break;
+                        }
+                        _ => {}
+                    }
+                    stdout.flush().unwrap();
+                }
+            }
+        }
+        disable_raw_mode().unwrap();
+    }).await.unwrap();
+
+
 }
