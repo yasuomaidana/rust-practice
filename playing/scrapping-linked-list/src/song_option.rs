@@ -2,16 +2,18 @@ use std::collections::LinkedList;
 use std::io::{self, Write};
 use crate::model::Song;
 use crate::song_option::SongOptionState::Unselected;
+use crate::string_formatter::{bold_string, color_string, Color};
 
-enum SongOptionState{
+enum SongOptionState {
     Selected,
     Unselected,
-    Hovered,
+    ToDelete
 }
 
-struct SongOption{
+struct SongOption {
     song: Song,
     selected: SongOptionState,
+    hovered: bool,
 }
 
 impl SongOption {
@@ -19,38 +21,52 @@ impl SongOption {
         Self {
             song,
             selected: Unselected,
+            hovered: false,
         }
+    }
+    fn format(&self) -> String {
+        let selected = match self.selected {
+            SongOptionState::Selected => format!("> {}-{}", self.song.title, self.song.artist),
+            _ => format!("  {}-{}", self.song.title, self.song.artist),
+        };
+        match self.hovered {
+            true => bold_string(&selected),
+            false => selected,
+        }
+    }
+    fn color_format(&self) -> String {
+        match self.selected {
+            SongOptionState::Selected => color_string(&self.format(), Some(Color::Green)),
+            SongOptionState::ToDelete => color_string(&self.format(), Some(Color::Red)),
+            Unselected => self.format(),
+        }.to_string()
     }
 }
 
 pub struct SongOptions {
     options: LinkedList<SongOption>,
-    selected_index: usize,
 }
+
 
 impl SongOptions {
     pub fn new(songs: Vec<Song>) -> Self {
         let mut options = LinkedList::new();
         for song in songs {
-            options.push_back(SongOption::new(song));
+            options.push_back(SongOption::new(Song::from(song)));
+        }
+        if let Some(first) = options.front_mut() {
+            first.selected = SongOptionState::Selected;
         }
         Self {
-            options,
-            selected_index: 0,
+            options
         }
     }
 
     pub fn print(&self) {
-        let mut i = 0;
         let mut stdout = io::stdout();
         write!(stdout, "\x1Bc").unwrap();
         for option in &self.options {
-            if i == self.selected_index {
-                writeln!(stdout, "> {}-{}", option.song.title, option.song.artist).unwrap();
-            } else {
-                writeln!(stdout,"  {}-{}", option.song.title, option.song.artist).unwrap();
-            }
-            i += 1;
+            writeln!(stdout, "{}", option.color_format()).unwrap();
         }
     }
 }

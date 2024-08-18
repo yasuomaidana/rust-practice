@@ -12,3 +12,7 @@ pub fn color_string(s: &str, color: Option<Color>) -> String {
     };
     format!("{}{}\x1b[0m", color, s)
 }
+
+pub fn bold_string(s: &str) -> String {
+    format!("\x1b[1m{}\x1b[0m", s)
+}
