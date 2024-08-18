@@ -1,5 +1,6 @@
 use std::collections::LinkedList;
 use std::io::{self, Write};
+use std::mem;
 use crate::model::Song;
 use crate::song_option::SongOptionState::{Selected, Unselected, ToDelete};
 use crate::string_formatter::{bold_string, color_string, Color};
@@ -143,45 +144,27 @@ impl SongOptions {
         if up {
             while let Some(current) = iterator.next_back() {
                 if current.selected == Selected {
-                    current.selected = Unselected;
-                    let next = iterator.next_back();
-                    match next {
-                        Some(next) => {
-                            let song = next.song.clone();
-                            next.selected = Selected;
-                            next.song = current.song.clone();
-                            current.song = song;
-                            return;
-                        }
-                        None => {
-                            let last = self.options.back_mut().unwrap();
-                            last.selected = Selected;
-                            return;
-                        }
+                    if let Some(next) = iterator.next_back() {
+                        mem::swap(next, current);
+                        return;
                     }
                 }
             }
         } else {
             while let Some(current) = iterator.next() {
                 if current.selected == Selected {
-                    current.selected = Unselected;
                     let next = iterator.next();
-                    match next {
-                        Some(next) => {
-                            next.selected = Selected;
-                            let song = next.song.clone();
-                            next.song = current.song.clone();
-                            current.song = song;
-                            return;
-                        }
-                        None => {
-                            let last = self.options.front_mut().unwrap();
-                            last.selected = Selected;
-                            return;
-                        }
+                    if let Some(next) = next {
+                        mem::swap(next, current);
+                        return;
                     }
+
                 }
             }
         }
+        let head = self.options.pop_front().unwrap();
+        let tail = self.options.pop_back().unwrap();
+        self.options.push_front(tail);
+        self.options.push_back(head);
     }
 }
