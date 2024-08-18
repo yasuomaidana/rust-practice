@@ -74,10 +74,10 @@ impl SongOptions {
 
     pub fn select_delete(&mut self) {
         let iterator = self.options.iter_mut();
-        let to_delete = iterator.filter(|option| option.selected == Selected || option.selected==ToDelete).next().unwrap();
+        let to_delete = iterator.filter(|option| option.selected == Selected || option.selected == ToDelete).next().unwrap();
         if to_delete.selected == Selected {
             to_delete.selected = ToDelete;
-        }else{
+        } else {
             to_delete.selected = Selected;
         }
     }
@@ -132,5 +132,56 @@ impl SongOptions {
             .map(|option| option.clone())
             .collect();
         self.options.front_mut().unwrap().selected = Selected;
+    }
+
+    pub fn move_selected(&mut self, up: bool) {
+        let len = self.options.len();
+        if len == 0 {
+            return;
+        }
+        let mut iterator = self.options.iter_mut();
+        if up {
+            while let Some(current) = iterator.next_back() {
+                if current.selected == Selected {
+                    current.selected = Unselected;
+                    let next = iterator.next_back();
+                    match next {
+                        Some(next) => {
+                            let song = next.song.clone();
+                            next.selected = Selected;
+                            next.song = current.song.clone();
+                            current.song = song;
+                            return;
+                        }
+                        None => {
+                            let last = self.options.back_mut().unwrap();
+                            last.selected = Selected;
+                            return;
+                        }
+                    }
+                }
+            }
+        } else {
+            while let Some(current) = iterator.next() {
+                if current.selected == Selected {
+                    current.selected = Unselected;
+                    let next = iterator.next();
+                    match next {
+                        Some(next) => {
+                            next.selected = Selected;
+                            let song = next.song.clone();
+                            next.song = current.song.clone();
+                            current.song = song;
+                            return;
+                        }
+                        None => {
+                            let last = self.options.front_mut().unwrap();
+                            last.selected = Selected;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
 }

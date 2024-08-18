@@ -55,10 +55,10 @@ async fn main() {
                                 continue;
                             }
                         }
-                        KeyCode::Char(c) => {
-                            if event::poll(Duration::from_millis(500)).unwrap() {
-                                write!(stdout, "\x1Bc").unwrap();
-                                writeln!(stdout, "You pressed: {}", c).unwrap();
+
+                        KeyCode::Char('u') => {
+                            if event::poll(Duration::from_millis(100)).unwrap() {
+                                song_options.move_selected(true);
                                 continue;
                             }
                         }
