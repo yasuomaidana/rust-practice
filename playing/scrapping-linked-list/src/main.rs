@@ -37,6 +37,12 @@ async fn main() {
                                 continue;
                             }
                         }
+                        KeyCode::Down => {
+                            if event::poll(Duration::from_millis(100)).unwrap() {
+                                song_options.move_selection(false);
+                                continue;
+                            }
+                        }
                         KeyCode::Char(c) => {
                             if event::poll(Duration::from_millis(500)).unwrap() {
                                 write!(stdout, "\x1Bc").unwrap();

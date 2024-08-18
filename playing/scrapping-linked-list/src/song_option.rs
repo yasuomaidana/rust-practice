@@ -85,25 +85,34 @@ impl SongOptions {
                     current.selected = Unselected;
                     let next = iterator.next_back();
                     match next {
-                        Some(next) => { next.selected = Selected;
+                        Some(next) => {
+                            next.selected = Selected;
                             return;
-                        },
+                        }
                         None => {
                             let last = self.options.back_mut().unwrap();
                             last.selected = Selected;
                             return;
-                        },
+                        }
                     }
-
                 }
             }
         } else {
-            let current = iterator.next().unwrap();
-            while let Some(next) = iterator.next() {
+            while let Some(current) = iterator.next() {
                 if current.selected == Selected {
                     current.selected = Unselected;
-                    next.selected = Selected;
-                    return;
+                    let next = iterator.next();
+                    match next {
+                        Some(next) => {
+                            next.selected = Selected;
+                            return;
+                        }
+                        None => {
+                            let last = self.options.front_mut().unwrap();
+                            last.selected = Selected;
+                            return;
+                        }
+                    }
                 }
             }
         }
