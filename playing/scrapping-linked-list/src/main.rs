@@ -45,6 +45,7 @@ async fn main() {
                         }
                         KeyCode::Char(c) => {
                             if event::poll(Duration::from_millis(500)).unwrap(){
+                                write!(stdout, "\x1Bc").unwrap();
                                 writeln!(stdout, "You pressed: {}", c).unwrap();
                                 continue;
                             }
