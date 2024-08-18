@@ -2,7 +2,7 @@ use std::io;
 use std::io::Write;
 use std::time::Duration;
 use crossterm::event;
-use crossterm::event::{Event, KeyCode};
+use crossterm::event::{ Event, KeyCode};
 use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
 use tokio::task;
 use crate::song_option::SongOptions;
@@ -24,7 +24,7 @@ async fn main() {
 
     task::spawn(async move {
         loop {
-            if event::poll(std::time::Duration::from_millis(100)).unwrap() {
+            if event::poll(Duration::from_millis(500)).unwrap() {
                 if let Event::Key(key_event) = event::read().unwrap() {
                     match key_event.code {
                         KeyCode::Char('q') => {
@@ -49,6 +49,12 @@ async fn main() {
                                 continue;
                             }
                         }
+                        KeyCode::Enter =>{
+                            if event::poll(Duration::from_millis(100)).unwrap() {
+                                song_options.delete_selected();
+                                continue;
+                            }
+                        }
                         KeyCode::Char(c) => {
                             if event::poll(Duration::from_millis(500)).unwrap() {
                                 write!(stdout, "\x1Bc").unwrap();
@@ -60,12 +66,15 @@ async fn main() {
                             writeln!(stdout, "Exiting...").unwrap();
                             break;
                         }
-                        _ => {}
+                        _ => {
+                            song_options.print();
+                        }
                     }
-                    stdout.flush().unwrap();
                 }
             }
             song_options.print();
+            println!("Press 'q' to exit.");
+            stdout.flush().unwrap();
         }
         disable_raw_mode().unwrap();
     }).await.unwrap();

@@ -4,13 +4,14 @@ use crate::model::Song;
 use crate::song_option::SongOptionState::{Selected, Unselected, ToDelete};
 use crate::string_formatter::{bold_string, color_string, Color};
 
-#[derive(PartialEq)]
+#[derive(PartialEq, Clone)]
 enum SongOptionState {
     Selected,
     Unselected,
     ToDelete,
 }
 
+#[derive(Clone)]
 struct SongOption {
     song: Song,
     selected: SongOptionState,
@@ -123,5 +124,13 @@ impl SongOptions {
                 }
             }
         }
+    }
+
+    pub fn delete_selected(&mut self) {
+        self.options = self.options.iter_mut()
+            .filter(|option| option.selected != ToDelete)
+            .map(|option| option.clone())
+            .collect();
+        self.options.front_mut().unwrap().selected = Selected;
     }
 }
