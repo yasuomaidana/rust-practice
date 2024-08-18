@@ -1,13 +1,16 @@
 use std::collections::LinkedList;
 use std::io::{self, Write};
+use std::path::Iter;
+use std::slice::IterMut;
 use crate::model::Song;
-use crate::song_option::SongOptionState::Unselected;
+use crate::song_option::SongOptionState::{Selected, Unselected};
 use crate::string_formatter::{bold_string, color_string, Color};
 
+#[derive(PartialEq)]
 enum SongOptionState {
     Selected,
     Unselected,
-    ToDelete
+    ToDelete,
 }
 
 struct SongOption {
@@ -58,7 +61,7 @@ impl SongOptions {
             first.selected = SongOptionState::Selected;
         }
         Self {
-            options
+            options,
         }
     }
 
@@ -67,6 +70,42 @@ impl SongOptions {
         write!(stdout, "\x1Bc").unwrap();
         for option in &self.options {
             writeln!(stdout, "{}", option.color_format()).unwrap();
+        }
+    }
+
+    pub fn move_selection(&mut self, up: bool) {
+        let len = self.options.len();
+        if len == 0 {
+            return;
+        }
+        let mut iterator = self.options.iter_mut();
+        if up {
+            while let Some(current) = iterator.next_back() {
+                if current.selected == Selected {
+                    current.selected = Unselected;
+                    let next = iterator.next_back();
+                    match next {
+                        Some(next) => { next.selected = Selected;
+                            return;
+                        },
+                        None => {
+                            let last = self.options.back_mut().unwrap();
+                            last.selected = Selected;
+                            return;
+                        },
+                    }
+
+                }
+            }
+        } else {
+            let current = iterator.next().unwrap();
+            while let Some(next) = iterator.next() {
+                if current.selected == Selected {
+                    current.selected = Unselected;
+                    next.selected = Selected;
+                    return;
+                }
+            }
         }
     }
 }

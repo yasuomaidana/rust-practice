@@ -31,8 +31,14 @@ async fn main() {
                             writeln!(stdout, "Exiting...").unwrap();
                             break;
                         }
+                        KeyCode::Up => {
+                            if event::poll(Duration::from_millis(100)).unwrap() {
+                                song_options.move_selection(true);
+                                continue;
+                            }
+                        }
                         KeyCode::Char(c) => {
-                            if event::poll(Duration::from_millis(500)).unwrap(){
+                            if event::poll(Duration::from_millis(500)).unwrap() {
                                 write!(stdout, "\x1Bc").unwrap();
                                 writeln!(stdout, "You pressed: {}", c).unwrap();
                                 continue;
@@ -51,6 +57,4 @@ async fn main() {
         }
         disable_raw_mode().unwrap();
     }).await.unwrap();
-
-
 }
