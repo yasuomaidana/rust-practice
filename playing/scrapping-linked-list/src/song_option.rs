@@ -1,9 +1,7 @@
 use std::collections::LinkedList;
 use std::io::{self, Write};
-use std::path::Iter;
-use std::slice::IterMut;
 use crate::model::Song;
-use crate::song_option::SongOptionState::{Selected, Unselected};
+use crate::song_option::SongOptionState::{Selected, Unselected, ToDelete};
 use crate::string_formatter::{bold_string, color_string, Color};
 
 #[derive(PartialEq)]
@@ -29,7 +27,7 @@ impl SongOption {
     }
     fn format(&self) -> String {
         let selected = match self.selected {
-            SongOptionState::Selected => format!("> {}-{}", self.song.title, self.song.artist),
+            Selected => format!("> {}-{}", self.song.title, self.song.artist),
             _ => format!("  {}-{}", self.song.title, self.song.artist),
         };
         match self.hovered {
@@ -39,8 +37,8 @@ impl SongOption {
     }
     fn color_format(&self) -> String {
         match self.selected {
-            SongOptionState::Selected => color_string(&self.format(), Some(Color::Green)),
-            SongOptionState::ToDelete => color_string(&self.format(), Some(Color::Red)),
+            Selected => color_string(&self.format(), Some(Color::Green)),
+            ToDelete => color_string(&self.format(), Some(Color::Red)),
             Unselected => self.format(),
         }.to_string()
     }
@@ -58,7 +56,7 @@ impl SongOptions {
             options.push_back(SongOption::new(Song::from(song)));
         }
         if let Some(first) = options.front_mut() {
-            first.selected = SongOptionState::Selected;
+            first.selected = Selected;
         }
         Self {
             options,
@@ -73,6 +71,15 @@ impl SongOptions {
         }
     }
 
+    pub fn select_delete(&mut self) {
+        let iterator = self.options.iter_mut();
+        let to_delete = iterator.filter(|option| option.selected == Selected || option.selected==ToDelete).next().unwrap();
+        if to_delete.selected == Selected {
+            to_delete.selected = ToDelete;
+        }else{
+            to_delete.selected = Selected;
+        }
+    }
     pub fn move_selection(&mut self, up: bool) {
         let len = self.options.len();
         if len == 0 {

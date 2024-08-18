@@ -43,6 +43,12 @@ async fn main() {
                                 continue;
                             }
                         }
+                        KeyCode::Char('r') => {
+                            if event::poll(Duration::from_millis(100)).unwrap() {
+                                song_options.select_delete();
+                                continue;
+                            }
+                        }
                         KeyCode::Char(c) => {
                             if event::poll(Duration::from_millis(500)).unwrap() {
                                 write!(stdout, "\x1Bc").unwrap();
