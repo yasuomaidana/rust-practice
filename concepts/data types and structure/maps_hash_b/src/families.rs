@@ -1,12 +1,8 @@
-use crate::family::Family;
-// use crate::families::generate_families;
+/*
 use crate::person::Person;
+use crate::family::Family;
 
-mod person;
-mod family;
-mod families;
-
-fn main() {
+pub fn generate_families<'a>() -> Vec<Family<'static>> {
     let mut family1 = Family::new(String::from("Smith"));
     let anya = Person::new(String::from("Anya C"), String::from("Smith"), 32);
     let beth = Person::new(String::from("Beth"), String::from("Smith"), 30);
@@ -41,13 +37,5 @@ fn main() {
     family5.add_member(&kevin);
 
 
-    let families = vec![family1, family2, family3, family4, family5];
-    // let families = generate_families();
-    for family in families {
-        println!("Family: {}", family.name);
-        for member in family.members {
-            println!("\t {} {} age {}", member.first_name, member.last_name, member.age);
-        }
-    }
-    println!("Hello, world!");
-}
+    vec![family1, family2, family3, family4, family5]
+}*/
