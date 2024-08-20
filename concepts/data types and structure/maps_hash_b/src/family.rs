@@ -1,6 +1,7 @@
 use std::cmp::Ordering;
 use crate::person::Person;
 
+#[derive(Hash)]
 pub(crate) struct Family<'a>{
     pub(crate) name: String,
     pub(crate) members: Vec<&'a Person>,

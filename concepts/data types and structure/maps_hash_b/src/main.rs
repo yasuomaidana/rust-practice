@@ -1,4 +1,6 @@
+use std::collections::{BTreeMap, HashMap};
 use crate::families::{fill_families, generate_families, generate_persons};
+use crate::family::Family;
 
 mod person;
 mod family;
@@ -15,7 +17,15 @@ fn main() {
             println!("\t {} {} age {}", member.first_name, member.last_name, member.age);
         }
     }
+    println!("\n--------------------{}-------------------------\n", "Sorted by family size");
+    let sorted_family_map = BTreeMap::from_iter(families.iter().map(|family| (family, family.members.len())));
+    for (family, count) in sorted_family_map {
+        println!("Family: {} has {} members", family.name, count);
+    }
+    println!("\n--------------------{}-------------------------\n", "Hasmap");
+    let family_map: HashMap<&Family, usize> = HashMap::from_iter(families.iter().map(|family| (family, family.members.len())));
+    for (family, count) in family_map.iter() {
+        println!("Family: {} has {} members", family.name, count);
+    }
 
-
-    println!("Hello, world!");
 }

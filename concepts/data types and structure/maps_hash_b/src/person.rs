@@ -1,3 +1,4 @@
+#[derive(Hash)]
 pub struct Person{
     pub(crate) first_name: String,
     pub(crate) last_name: String,
@@ -12,7 +13,7 @@ impl Person {
             age
         }
     }
-    pub(crate) fn update_age(&mut self, age: u8) {
-        self.age = age;
-    }
+    // pub(crate) fn update_age(&mut self, age: u8) {
+    //     self.age = age;
+    // }
 }
