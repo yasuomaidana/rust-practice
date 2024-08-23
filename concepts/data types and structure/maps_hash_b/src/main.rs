@@ -22,10 +22,15 @@ fn main() {
     for (family, count) in sorted_family_map {
         println!("Family: {} has {} members", family.name, count);
     }
-    println!("\n--------------------{}-------------------------\n", "Hasmap");
+    println!("\n--------------------{}-------------------------\n", "Hashmap");
     let family_map: HashMap<&Family, usize> = HashMap::from_iter(families.iter().map(|family| (family, family.members.len())));
     for (family, count) in family_map.iter() {
         println!("Family: {} has {} members", family.name, count);
     }
 
+    println!("\n--------------------{}-------------------------\n", "Binary map");
+    let family_b_map = BTreeMap::from_iter(family_map.iter());
+    for (family, count) in family_b_map.iter() {
+        println!("Family: {} has {} members", family.name, count);
+    }
 }
