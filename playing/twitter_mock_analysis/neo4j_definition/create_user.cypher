@@ -1,0 +1,1 @@
+CREATE (user:User {username: $username}) RETURN user
