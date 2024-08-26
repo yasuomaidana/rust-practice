@@ -101,7 +101,7 @@ impl FakeTwitterDatabase {
     pub async fn mock_data(&self) {
         let total_users = self.check_users().await;
         let total_mentions = self.get_total_mentions().await;
-        if total_users != 13 && total_mentions != 139 {
+        if total_users != 13 || total_mentions != 139 {
             self.clear_users().await;
             println!("Loading users");
             load_users(self).await;
