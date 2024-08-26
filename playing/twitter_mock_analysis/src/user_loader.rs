@@ -1,0 +1,173 @@
+use std::collections::HashSet;
+use crate::queries::FakeTwitterDatabase;
+
+pub async fn load_users(db: &FakeTwitterDatabase) {
+    let twitter_usernames: [&str; 140] = [
+        "blackmattersus",
+        "bleepthepolice",
+        "jenn_abrams",
+        "leroylovesusa",
+        "missourinewsus",
+        "rightnpr",
+        "ten_gop",
+        "traceyhappymom",
+        "trayneshacole",
+        "traceyhappymom",
+        "ten_gop",
+        "leroylovesusa",
+        "leroylovesusa",
+        "traceyhappymom",
+        "traceyhappymom",
+        "traceyhappymom",
+        "ten_gop",
+        "traceyhappymom",
+        "jenn_abrams",
+        "ten_gop",
+        "rightnpr",
+        "traceyhappymom",
+        "leroylovesusa",
+        "ten_gop",
+        "ten_gop",
+        "jenn_abrams",
+        "leroylovesusa",
+        "leroylovesusa",
+        "ten_gop",
+        "traceyhappymom",
+        "ten_gop",
+        "leroylovesusa",
+        "ten_gop",
+        "traceyhappymom",
+        "jenn_abrams",
+        "trayneshacole",
+        "ten_gop",
+        "ten_gop",
+        "leroylovesusa",
+        "leroylovesusa",
+        "leroylovesusa",
+        "leroylovesusa",
+        "ten_gop",
+        "ten_gop",
+        "leroylovesusa",
+        "ten_gop",
+        "ten_gop",
+        "traceyhappymom",
+        "traceyhappymom",
+        "ten_gop",
+        "traceyhappymom",
+        "ten_gop",
+        "jenn_abrams",
+        "ten_gop",
+        "ten_gop",
+        "leroylovesusa",
+        "worldofhashtags",
+        "traceyhappymom",
+        "ten_gop",
+        "leroylovesusa",
+        "ten_gop",
+        "traceyhappymom",
+        "traceyhappymom",
+        "ten_gop",
+        "traceyhappymom",
+        "traceyhappymom",
+        "worldofhashtags",
+        "ten_gop",
+        "traceyhappymom",
+        "ten_gop",
+        "ten_gop",
+        "ten_gop",
+        "rightnpr",
+        "ten_gop",
+        "leroylovesusa",
+        "traceyhappymom",
+        "leroylovesusa",
+        "leroylovesusa",
+        "traceyhappymom",
+        "traceyhappymom",
+        "traceyhappymom",
+        "ten_gop",
+        "leroylovesusa",
+        "traceyhappymom",
+        "ten_gop",
+        "blackmattersus",
+        "ten_gop",
+        "leroylovesusa",
+        "ten_gop",
+        "traceyhappymom",
+        "jenn_abrams",
+        "trayneshacole",
+        "ten_gop",
+        "ten_gop",
+        "leroylovesusa",
+        "leroylovesusa",
+        "leroylovesusa",
+        "leroylovesusa",
+        "ten_gop",
+        "ten_gop",
+        "leroylovesusa",
+        "ten_gop",
+        "ten_gop",
+        "traceyhappymom",
+        "traceyhappymom",
+        "worldofhashtags",
+        "blackmattersus",
+        "jenn_abrams",
+        "traceyhappymom",
+        "leroylovesusa",
+        "jenn_abrams",
+        "leroylovesusa",
+        "traceyhappymom",
+        "leroylovesusa",
+        "jenn_abrams",
+        "ten_gop",
+        "leroylovesusa",
+        "ten_gop",
+        "ten_gop",
+        // The fake community of journalists
+        "journalist1",
+        "journalist2",
+        "journalist3",
+        "journalist1",
+        "journalist2",
+        "journalist1",
+        "journalist3",
+        "journalist2",
+        "journalist1",
+        "journalist3",
+        "journalist2",
+        "journalist3",
+        "journalist1",
+        "journalist2",
+        "journalist1",
+        "journalist3",
+        "journalist2",
+        "journalist1",
+        "journalist3",
+        "journalist2",
+        "journalist3",
+    ];
+    let mut stored_users = HashSet::new();
+    for user_pair in twitter_usernames.windows(2){
+        let user_1 = String::from(user_pair[0]);
+        let user_2 = String::from(user_pair[1]);
+        let user1 = check_and_store(&user_1, &mut stored_users, db).await;
+        let user2 = check_and_store(&user_2, &mut stored_users, db).await;
+        db.mentions(user1, user2).await;
+    }
+}
+
+async fn check_and_store<'a>(user:&'a String, stored_users: &mut HashSet<String>, graph: &FakeTwitterDatabase) -> &'a String {
+
+    if stored_users.contains(user){
+        return user;
+    }
+    let user_stored = graph.get_user(user).await;
+    if user_stored.is_some(){
+        stored_users.insert(user.clone());
+        return user;
+    }
+    if !stored_users.contains(user){
+        let user = graph.create_user(user.clone()).await;
+        stored_users.insert(user.clone());
+    }
+    user
+}

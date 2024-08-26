@@ -1,4 +1,7 @@
+use crate::user_loader::load_users;
+
 mod queries;
+mod user_loader;
 
 #[tokio::main]
 async fn main() {
@@ -9,14 +12,14 @@ async fn main() {
         "neo4j"
     ).await;
 
-    let user_stored = db.get_user("johndoe").await;
-    match user_stored {
-        Some(user) => {
-            println!("User found: {:?}", user);
-        }
-        None => {
-            println!("User not found");
-        }
+    let total_users = db.check_users().await;
+    let total_mentions = db.get_total_mentions().await;
+    if total_users != 13 && total_mentions != 139 {
+        db.clear_users().await;
+        println!("Loading users");
+        load_users(&db).await;
     }
     println!("Users count: {:?}", db.check_users().await);
+    println!("Total comments: {:?}", db.get_total_mentions().await);
+
 }

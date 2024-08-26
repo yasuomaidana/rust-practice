@@ -3,19 +3,10 @@ use neo4rs::{query, Row};
 use neo4rs::ConfigBuilder;
 use neo4rs::Error;
 use neo4rs::Graph;
-use neo4rs::Keys;
-use neo4rs::Labels;
 use neo4rs::Node;
 
 pub(crate) struct FakeTwitterDatabase {
     graph: Graph,
-}
-
-#[derive(serde::Deserialize, Debug)]
-pub(crate) struct User {
-    labels: Labels,
-    keys: Keys<Vec<String>>,
-    username: String,
 }
 
 impl FakeTwitterDatabase {
@@ -76,16 +67,46 @@ impl FakeTwitterDatabase {
             None => "".to_string()
         }
     }
+
+    pub async fn mentions(&self, user1: &str, user2: &str) {
+        let mentions_query = fs::read_to_string("./neo4j_definition/mentions.cypher").unwrap();
+        let mentions_query = query(mentions_query.as_str());
+        let mut result = self.graph
+            .execute(
+                mentions_query.param("username_1", user1)
+                    .param("username_2", user2)).await
+            .unwrap();
+        let _ = result.next().await;
+    }
+
+    pub async fn get_total_mentions(&self) -> u64 {
+        let total_mentions_query = fs::read_to_string("./neo4j_definition/total_mentions.cypher").unwrap();
+        let total_mentions_query = query(total_mentions_query.as_str());
+        let mut result = self.graph.execute(total_mentions_query).await.unwrap();
+        let result = result.next().await;
+        get_count(result, "count")
+    }
+
+    pub async fn clear_users(&self) {
+        let clear_users_query = fs::read_to_string("./neo4j_definition/clear_users.cypher").unwrap();
+        let queries = clear_users_query.split(";");
+        for single_query in queries {
+            let clear_users_query = query(single_query);
+            let mut result = self.graph.execute(clear_users_query).await.unwrap();
+            let _ = result.next().await;
+        }
+    }
 }
 
-fn get_user(result: Result<Option<Row>, Error>, key:&str) -> Option<String> {
+
+fn get_user(result: Result<Option<Row>, Error>, key: &str) -> Option<String> {
     match result {
         Ok(user) => {
             match user {
                 Some(user) => {
-                    let raw_user:Node = user.get("user").unwrap();
+                    let raw_user: Node = user.get("user").unwrap();
                     raw_user.get(key).ok()
-                },
+                }
                 None => None
             }
         }
@@ -94,6 +115,24 @@ fn get_user(result: Result<Option<Row>, Error>, key:&str) -> Option<String> {
                 Some("".to_string())
             } else {
                 panic!("Unexpected message: {:?}", e);
+            }
+        }
+        Err(e) => {
+            panic!("Error: {:?}", e);
+        }
+    }
+}
+
+fn get_count(result: Result<Option<Row>, Error>, key: &str) -> u64 {
+    match result {
+        Ok(result) => {
+            match result {
+                Some(result) => {
+                    result.get::<u64>(key).unwrap()
+                }
+                None => {
+                    0
+                }
             }
         }
         Err(e) => {
