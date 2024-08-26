@@ -13,4 +13,9 @@ async fn main() {
 
     println!("Users count: {:?}", db.check_users().await);
     println!("Total comments: {:?}", db.get_total_mentions().await);
+
+    println!("Users:");
+    for user in db.get_users().await{
+        println!("{:?}", user);
+    }
 }

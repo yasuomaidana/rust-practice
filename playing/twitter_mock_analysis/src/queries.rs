@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use std::fs;
 use neo4rs::{query, Row};
 use neo4rs::ConfigBuilder;
@@ -33,6 +34,21 @@ impl FakeTwitterDatabase {
         let user_stored = result.next().await;
         get_user(user_stored, "username")
     }
+
+    pub async fn get_users(&self) -> HashSet<String> {
+        let get_users_query = fs::read_to_string("./neo4j_definition/get_users.cypher").unwrap();
+        let get_users_query = query(get_users_query.as_str()).param("limit", 20).param("offset", 0);
+        let mut result = self.graph.execute(get_users_query).await.unwrap();
+        let mut users = HashSet::new();
+
+        while let Ok(Some(user)) = result.next().await {
+            let raw_user: Node = user.get("u").unwrap();
+            let username = raw_user.get("username").unwrap();
+            users.insert(username);
+        }
+        users
+    }
+
     pub async fn check_users(&self) -> u64 {
         let check_users_query = fs::read_to_string("./neo4j_definition/check_users.cypher").unwrap();
         let check_users_query = query(check_users_query.as_str());
