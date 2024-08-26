@@ -7,3 +7,4 @@ edition = "2021"
 neo4rs = "0.8.0"
 tokio = { version = "1.0.0", features = ["rt", "rt-multi-thread", "macros"] }
 log = "0.4.22"
+serde = { version = "1.0.209", features = ["derive"] }
