@@ -946,6 +946,7 @@ dependencies = [
 name = "twitter_mock_analysis"
 version = "0.1.0"
 dependencies = [
+ "log",
  "neo4rs",
  "tokio",
 ]

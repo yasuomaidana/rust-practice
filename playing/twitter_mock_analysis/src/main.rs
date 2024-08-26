@@ -18,6 +18,5 @@ async fn main() {
             println!("User not found");
         }
     }
-
-
+    println!("Users count: {:?}", db.check_users().await);
 }

@@ -43,4 +43,25 @@ impl FakeTwitterDatabase {
             }
         }
     }
+    pub async fn check_users(&self)-> u64{
+        let check_users_query = fs::read_to_string("./neo4j_definition/check_users.cypher").unwrap();
+        let check_users_query = query(check_users_query.as_str());
+        let mut result = self.graph.execute(check_users_query).await.unwrap();
+        let result = result.next().await;
+        match result {
+            Ok(result) => {
+                match result {
+                    Some(result) => {
+                        result.get::<u64>("count").unwrap()
+                    }
+                    None => {
+                        0
+                    }
+                }
+            }
+            Err(e) => {
+                panic!("Error: {:?}", e);
+            }
+        }
+    }
 }
