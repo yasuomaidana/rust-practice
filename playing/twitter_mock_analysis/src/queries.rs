@@ -4,6 +4,7 @@ use neo4rs::ConfigBuilder;
 use neo4rs::Error;
 use neo4rs::Graph;
 use neo4rs::Node;
+use crate::user_loader::load_users;
 
 pub(crate) struct FakeTwitterDatabase {
     graph: Graph,
@@ -94,6 +95,16 @@ impl FakeTwitterDatabase {
             let clear_users_query = query(single_query);
             let mut result = self.graph.execute(clear_users_query).await.unwrap();
             let _ = result.next().await;
+        }
+    }
+
+    pub async fn mock_data(&self) {
+        let total_users = self.check_users().await;
+        let total_mentions = self.get_total_mentions().await;
+        if total_users != 13 && total_mentions != 139 {
+            self.clear_users().await;
+            println!("Loading users");
+            load_users(self).await;
         }
     }
 }
