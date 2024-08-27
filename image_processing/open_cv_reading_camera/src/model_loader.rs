@@ -1,4 +1,5 @@
 use candle_core::{DType, Device};
+use candle_core::utils::metal_is_available;
 use candle_datasets::vision::mnist;
 use candle_nn::{VarBuilder, VarMap};
 use crate::mnist_model::{training_loop, training_loop_cnn, Model, TrainingArgs, WhichModel};
@@ -9,7 +10,13 @@ pub(crate) fn get_mnist_model<M: Model + 'static>(
 ) -> Result<(M, Device), ()> {
     let m = mnist::load().unwrap();
     let mut varmap = VarMap::new();
-    let dev = Device::cuda_if_available(0).expect("Failed to get device");
+
+    let metal_available = metal_is_available();
+    let dev = if metal_available {
+        Device::new_metal(0).expect("Failed to create metal device")
+    } else {
+        Device::cuda_if_available(0).expect("Failed to create cuda device")
+    };
 
 
     if let Some(load) = &args.load {

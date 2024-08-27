@@ -2,6 +2,7 @@ use clap::{ValueEnum};
 use rand::prelude::*;
 
 use candle_core::{DType,Result, Tensor, D};
+use candle_core::utils::metal_is_available;
 use candle_nn::{loss, ops, Conv2d, Linear, Module, ModuleT, Optimizer, VarBuilder, VarMap};
 
 const IMAGE_DIM: usize = 784;
@@ -112,7 +113,12 @@ pub fn training_loop_cnn(
 ) -> anyhow::Result<()> {
     const BSIZE: usize = 64;
 
-    let dev = candle_core::Device::cuda_if_available(0)?;
+    let metal_available = metal_is_available();
+    let dev = if metal_available {
+        candle_core::Device::new_metal(0)?
+    } else {
+        candle_core::Device::cuda_if_available(0)?
+    };
 
     let train_labels = m.train_labels;
     let train_images = m.train_images.to_device(&dev)?;
@@ -175,7 +181,13 @@ pub fn training_loop<M: Model>(
     m: candle_datasets::vision::Dataset,
     args: &TrainingArgs,
 ) -> anyhow::Result<()> {
-    let dev = candle_core::Device::cuda_if_available(0)?;
+
+    let metal_available = metal_is_available();
+    let dev = if metal_available {
+        candle_core::Device::new_metal(0)?
+    } else {
+        candle_core::Device::cuda_if_available(0)?
+    };
 
     let train_labels = m.train_labels;
     let train_images = m.train_images.to_device(&dev)?;
