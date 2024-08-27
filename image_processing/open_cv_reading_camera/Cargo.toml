@@ -3,10 +3,17 @@ name = "open_cv_reading_camera"
 version = "0.1.0"
 edition = "2021"
 
-# [dependencies]
+[dependencies]
+clap = { version = "4.5.16", features = ["derive"] }
+rand = "0.8.5"
+anyhow = "1.0.86"
+candle-datasets = "0.6.0"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 opencv = { version = "0.92.2", features = ["clang-runtime"] }
+candle-core = { version = "0.6.0", features = ["metal"] }
+candle-nn = { version = "0.6.0", features = ["metal"] }
 
 [target.'cfg(not(target_os = "macos"))'.dependencies]
 opencv = "0.92.2"
+candle-nn = "0.6.0"
