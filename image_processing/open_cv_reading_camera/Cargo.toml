@@ -3,9 +3,10 @@ name = "open_cv_reading_camera"
 version = "0.1.0"
 edition = "2021"
 
-[dependencies]
-[target.'cfg(target_os = "macos")'.dependencies]
-opencv = { version = "0.92.1", features = ["clang-runtime"] }
+# [dependencies]
 
-[target.'cfg(target_os = "windows")'.dependencies]
-opencv = "0.92.1"
+[target.'cfg(target_os = "macos")'.dependencies]
+opencv = { version = "0.92.2", features = ["clang-runtime"] }
+
+[target.'cfg(not(target_os = "macos"))'.dependencies]
+opencv = "0.92.2"
