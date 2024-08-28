@@ -156,7 +156,7 @@ pub fn training_loop_cnn(
         }
         let avg_loss = sum_loss / n_batches as f32;
 
-        let test_logits = model.forward_training(&test_images, false)?;
+        let test_logits = model.forward(&test_images)?;
         let sum_ok = test_logits
             .argmax(D::Minus1)?
             .eq(&test_labels)?
