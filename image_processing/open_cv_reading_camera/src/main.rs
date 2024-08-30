@@ -2,10 +2,11 @@ mod mnist_model;
 mod model_loader;
 
 use candle_core::{DType, Device, Tensor, D};
+use candle_datasets::vision::mnist;
 use candle_nn::ops::{softmax};
 use ndarray::{ArrayBase, Dim, Ix, OwnedRepr};
 use opencv::{Result, prelude::*, videoio, highgui, imgproc};
-use opencv::core::Size;
+use opencv::core::{Size, CV_8U};
 use opencv::imgproc::{COLOR_BGR2HSV, INTER_LINEAR};
 use crate::mnist_model::{ConvNet, Model, TrainingArgs, WhichModel};
 use crate::model_loader::get_mnist_model;
@@ -35,6 +36,19 @@ fn mat_to_tensor(mat: &Mat, device: &Device) -> Result<Tensor, Box<dyn std::erro
     Ok(tensor)
 }
 
+fn show_image(image: &Vec<f32>) -> Result<()> {
+    // Convert the vector to a Mat
+    let mat = Mat::from_slice(image).unwrap();
+    let mat = mat.reshape(1, 28).unwrap();
+    let mut mat_u8 = Mat::default();
+    mat.convert_to(&mut mat_u8, CV_8U, 255.0, 0.0)?;
+
+    // Display the image
+    highgui::imshow("Some Image", &mat_u8)?;
+    highgui::wait_key(0)?;
+    Ok(())
+}
+
 fn main() -> Result<()> {
 
     let args = TrainingArgs {
@@ -43,6 +57,11 @@ fn main() -> Result<()> {
         save: Some("cnn_mlp_mnist_model.safetensors".to_string()),
         epochs: 5,
     };
+
+    // let m = mnist::load().unwrap().test_images;
+    // let some_image = m.get(0).unwrap();
+    // let some_image = some_image.to_vec1::<f32>().unwrap();
+    // show_image(&some_image)?;
 
     let model_type = WhichModel::Cnn; // Choose your model type
 
@@ -84,7 +103,7 @@ fn main() -> Result<()> {
         println!("{:?}", flattened_result);
         println!("{:?}", result.argmax(D::Minus1).unwrap().to_dtype(DType::U32).unwrap().sum_all().unwrap().to_scalar::<u32>().unwrap());
 
-        highgui::imshow("Blue filtered", &blue_only_frame)?;
+        highgui::imshow("Blue filtered", &resized_gray)?;
 
         let key = highgui::wait_key(10)?;
         match key {

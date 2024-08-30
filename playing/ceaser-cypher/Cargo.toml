@@ -1,0 +1,11 @@
+[package]
+name = "ceaser-cypher"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = ["ceaser_cypher_lib"]
+
+[workspace.dependencies]
+clap = "4.5.16"
+
