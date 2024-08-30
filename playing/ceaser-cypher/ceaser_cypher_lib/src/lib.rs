@@ -1,5 +1,3 @@
-use std::error::Error;
-
 pub const SHIFT: i32 = 3; // Default shift value
 
 pub struct CaesarCipher {

@@ -1,0 +1,8 @@
+[package]
+name = "ceaser-encrypter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+clap = { workspace = true, features = ["derive"] }
+ceaser_cypher_lib = { path = "../ceaser_cypher_lib" }
