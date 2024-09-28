@@ -7,7 +7,7 @@ fn main() {
     for i in 0..NUMBER_OF_THREADS {
         threads.push(thread::spawn(move || {
             println!("hi number {} from the spawned thread!", i);
-            thread::sleep(std::time::Duration::from_millis(1));
+            thread::sleep(std::time::Duration::from_millis(1000));
         }));
     }
     for thread in threads {

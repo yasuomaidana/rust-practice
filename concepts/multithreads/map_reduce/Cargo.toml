@@ -1,0 +1,6 @@
+[package]
+name = "const_map_reduce"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]

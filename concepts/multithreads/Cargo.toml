@@ -4,6 +4,6 @@ version = "0.1.0"
 edition = "2021"
 
 [workspace]
-members = ["channels", "for_cycle_threads"]
+members = ["channels", "map_reduce", "for_cycle_threads"]
 
 [dependencies]
