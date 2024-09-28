@@ -3,13 +3,5 @@
 version = 3
 
 [[package]]
-name = "channels"
-version = "0.1.0"
-
-[[package]]
 name = "for_cycle_threads"
-version = "0.1.0"
-
-[[package]]
-name = "multithreads"
 version = "0.1.0"
