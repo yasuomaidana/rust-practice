@@ -7,3 +7,6 @@ edition = "2021"
 members = ["channels", "map_reduce", "for_cycle_threads", "easy_mutex", "mutex_thread"]
 
 [dependencies]
+
+[workspace.dependencies]
+rayon = "1.10.0"
