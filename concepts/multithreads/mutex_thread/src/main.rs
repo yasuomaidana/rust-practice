@@ -2,6 +2,7 @@ use std::sync::{Arc, Mutex};
 use std::thread;
 use std::thread::sleep;
 use std::time::Duration;
+use rayon::prelude::*;
 
 fn main() {
     let counter = Arc::new(Mutex::new(0));
@@ -21,9 +22,9 @@ fn main() {
                 }
             }
         })
-    });
+    }).collect::<Vec<_>>();
 
-    threads.for_each(|t| {
+    threads.into_par_iter().for_each(move |t| {
         t.join().unwrap();
     });
 
