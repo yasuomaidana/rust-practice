@@ -3,13 +3,24 @@
 version = 3
 
 [[package]]
+name = "arc_practice"
+version = "0.1.0"
+
+[[package]]
 name = "box_playing"
 version = "0.1.0"
 
 [[package]]
 name = "rc_practice"
 version = "0.1.0"
+dependencies = [
+ "utils",
+]
 
 [[package]]
 name = "smart_pointers"
+version = "0.1.0"
+
+[[package]]
+name = "utils"
 version = "0.1.0"

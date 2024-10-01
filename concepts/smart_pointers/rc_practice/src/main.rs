@@ -1,24 +1,5 @@
-use std::cell::RefCell;
-use std::rc::{Rc, Weak};
-
-struct Tool{
-    name: String,
-    owner: Rc<Owner>
-}
-
-struct Owner{
-    name: String,
-    tools: RefCell<Vec<Weak<Tool>>>,
-}
-
-impl Owner {
-    fn new(name: String) -> Owner {
-        Owner {
-            name,
-            tools: RefCell::new(vec![])
-        }
-    }
-}
+use std::rc::Rc;
+use utils::{Owner, Tool};
 
 fn main() {
     let gandalf = Rc::new(Owner::new("Gandalf".to_string()));

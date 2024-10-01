@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/box_playing/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/rc_practice/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/arc_practice/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/utils/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/box_playing/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
