@@ -18,7 +18,7 @@ pub struct Fork {
 
 pub struct Philosopher {
     id: usize,
-    name: String,
+    pub(crate) name: String,
     pub state: PhilosopherState,
     stomach_capacity: usize,
     turn_time: usize,

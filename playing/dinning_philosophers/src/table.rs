@@ -2,7 +2,7 @@ use std::sync::{Arc, Mutex};
 use crate::philosophers::{Fork, Philosopher};
 
 pub struct Table {
-    philosophers: Vec<Arc<Philosopher>>,
+    pub(crate) philosophers: Vec<Arc<Philosopher>>,
     forks: Vec<Arc<Fork>>,
 }
 
