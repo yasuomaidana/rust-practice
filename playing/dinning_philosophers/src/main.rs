@@ -1,6 +1,6 @@
-use std::env::join_paths;
 use std::sync::Arc;
 use std::thread;
+use rayon::iter::{IntoParallelIterator,ParallelIterator};
 
 mod philosophers;
 mod table;
@@ -31,8 +31,19 @@ fn main() {
     let threads = table.philosophers.iter().map(|philosopher| {
         let philosopher = Arc::clone(philosopher);
         thread::spawn(move || {
-            println!("{} is thinking", philosopher.name);
+            if philosopher.fork_status(){
+                println!("{} has picked up the forks {} and {}",
+                            philosopher.name,
+                         philosopher.left_fork.id, philosopher.right_fork.id);
+                philosopher.eat();
+            }
+            else{
+                println!("{}  is waiting for the forks", philosopher.name);
+            }
+            thread::sleep(std::time::Duration::from_secs(1));
         })
     }).collect::<Vec<_>>();
-    threads.into_iter().for_each(|t| t.join().unwrap());
+    threads.into_par_iter().for_each(|thread| {
+        thread.join().unwrap();
+    });
 }
