@@ -41,8 +41,8 @@ impl Philosopher {
             id,
             name: name.to_string(),
             state: PhilosopherState::Thinking,
-            stomach_capacity: 10,
-            turn_time: 1,
+            stomach_capacity,
+            turn_time,
             left_fork,
             right_fork,
         }
