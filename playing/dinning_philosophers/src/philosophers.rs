@@ -11,15 +11,15 @@ pub enum PhilosopherState {
 }
 
 pub struct Fork {
-    id: usize,
-    owner: Mutex<()>,
+    pub(crate) id: usize,
+    pub(crate) owner: Mutex<()>,
 }
 
 
-struct Philosopher {
+pub struct Philosopher {
     id: usize,
     name: String,
-    state: PhilosopherState,
+    pub state: PhilosopherState,
     stomach_capacity: usize,
     turn_time: usize,
     left_fork: Arc<Fork>,
