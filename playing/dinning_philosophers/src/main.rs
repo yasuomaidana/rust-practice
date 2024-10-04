@@ -32,9 +32,6 @@ fn main() {
         let philosopher = Arc::clone(philosopher);
         thread::spawn(move || {
             if philosopher.fork_status(){
-                println!("{} has picked up the forks {} and {}",
-                            philosopher.name,
-                         philosopher.left_fork.id, philosopher.right_fork.id);
                 philosopher.eat();
             }
             else{
