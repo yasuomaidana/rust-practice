@@ -61,17 +61,18 @@ impl Philosopher {
             (&self.right_fork, &self.left_fork)
         };
 
+        let _first_fork = first_fork.owner.lock().unwrap();
+        println!("{} picked first fork {}", self.name, first_fork.id);
+        let _second_fork = second_fork.owner.lock().unwrap();
+        println!("{} picked second fork {}", self.name, second_fork.id);
+
         *self.state.lock().unwrap() =  PhilosopherState::Eating;
         println!("{} is eating", self.name);
-        let _first_fork = first_fork.owner.lock().unwrap();
-        println!("picked first fork {}", first_fork.id);
-        let _second_fork = second_fork.owner.lock().unwrap();
-        println!("picked second fork {}", second_fork.id);
 
         *self.stomach_capacity.lock().unwrap() -= 1 * self.turn_time;
         sleep(Duration::from_micros(self.turn_time as u64));
-        println!("releasing first fork {}", first_fork.id);
-        println!("releasing second fork {}", second_fork.id);
+        println!("{} releasing first fork {}", self.name, first_fork.id);
+        println!("{} releasing second fork {}", self.name, second_fork.id);
         match *self.stomach_capacity.lock().unwrap() <= 0 {
             true => *self.state.lock().unwrap() =  PhilosopherState::Full,
             false => *self.state.lock().unwrap() =  PhilosopherState::Hungry,
