@@ -13,7 +13,7 @@ test:
 	cargo test
 
 build-release:
-	@echo "Building release binary..."
+	@echo "Building release binary for $(shell uname -s)..."
 	cargo build --release
 
 run:
