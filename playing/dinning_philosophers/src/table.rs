@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashSet, VecDeque};
+// use std::collections::{BTreeSet, HashSet, VecDeque};
 use std::sync::{Arc, Mutex};
 use std::thread;
 use rayon::iter::{IntoParallelIterator, IntoParallelRefIterator, ParallelIterator};
@@ -6,7 +6,7 @@ use crate::philosophers::{Fork, Philosopher, PhilosopherState};
 
 pub struct Table {
     pub(crate) philosophers: Vec<Arc<Philosopher>>,
-    forks: Vec<Arc<Fork>>,
+    // forks: Vec<Arc<Fork>>,
 }
 
 impl Table {
@@ -35,7 +35,7 @@ impl Table {
 
         Table {
             philosophers,
-            forks,
+            // forks,
         }
     }
 

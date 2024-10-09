@@ -1,4 +1,5 @@
-use std::cmp::{Ordering, PartialEq};
+// use std::cmp::{Ordering, PartialEq};
+use std::cmp::PartialEq;
 use std::hash::Hash;
 use std::sync::{Arc, Mutex};
 use std::thread::sleep;
@@ -80,15 +81,15 @@ impl Philosopher {
         }
     }
 
-    pub fn think(&mut self) {
-        let state = self.state.lock().unwrap();
-
-        if *state != PhilosopherState::Thinking {
-            println!("{} is thinking", self.name);
-            return;
-        }
-        *self.state.lock().unwrap() =  PhilosopherState::Thinking;
-    }
+    // pub fn think(&mut self) {
+    //     let state = self.state.lock().unwrap();
+    //
+    //     if *state != PhilosopherState::Thinking {
+    //         println!("{} is thinking", self.name);
+    //         return;
+    //     }
+    //     *self.state.lock().unwrap() =  PhilosopherState::Thinking;
+    // }
 
     pub fn fork_status(&self) -> bool {
         let left_fork = match self.left_fork.owner.try_lock() {

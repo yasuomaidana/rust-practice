@@ -1,6 +1,6 @@
-use std::sync::Arc;
-use std::thread;
-use rayon::iter::{IntoParallelIterator,ParallelIterator};
+// use std::sync::Arc;
+// use std::thread;
+// use rayon::iter::{IntoParallelIterator,ParallelIterator};
 
 mod philosophers;
 mod table;
