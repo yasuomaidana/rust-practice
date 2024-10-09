@@ -27,20 +27,20 @@ fn main() {
     let capacities: Vec<usize> = names_capacity_time.iter().map(|(_, capacity, _)| *capacity).collect();
     let times: Vec<usize> = names_capacity_time.iter().map(|(_, _, time)| *time).collect();
     let table = table::Table::from_names_and_forks(names, capacities, times, 5);
-
-    let threads = table.philosophers.iter().map(|philosopher| {
-        let philosopher = Arc::clone(philosopher);
-        thread::spawn(move || {
-            if philosopher.fork_status(){
-                philosopher.eat();
-            }
-            else{
-                println!("{}  is waiting for the forks", philosopher.name);
-            }
-            thread::sleep(std::time::Duration::from_secs(1));
-        })
-    }).collect::<Vec<_>>();
-    threads.into_par_iter().for_each(|thread| {
-        thread.join().unwrap();
-    });
+    table.dine();
+    // let threads = table.philosophers.iter().map(|philosopher| {
+    //     let philosopher = Arc::clone(philosopher);
+    //     thread::spawn(move || {
+    //         if philosopher.fork_status(){
+    //             philosopher.eat();
+    //         }
+    //         else{
+    //             println!("{}  is waiting for the forks", philosopher.name);
+    //         }
+    //         thread::sleep(std::time::Duration::from_secs(1));
+    //     })
+    // }).collect::<Vec<_>>();
+    // threads.into_par_iter().for_each(|thread| {
+    //     thread.join().unwrap();
+    // });
 }

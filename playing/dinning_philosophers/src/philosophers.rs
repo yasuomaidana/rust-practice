@@ -1,8 +1,10 @@
-use std::cmp::PartialEq;
+use std::cmp::{Ordering, PartialEq};
+use std::hash::Hash;
 use std::sync::{Arc, Mutex};
 use std::thread::sleep;
 use std::time::Duration;
 
+#[derive(PartialEq, Eq)]
 pub enum PhilosopherState {
     Thinking,
     Hungry,
@@ -21,15 +23,10 @@ pub struct Philosopher {
     pub(crate) name: String,
     pub state: Mutex<PhilosopherState>,
     stomach_capacity: Mutex<usize>,
+    capacity: f32,
     turn_time: usize,
     pub(crate) left_fork: Arc<Fork>,
     pub(crate) right_fork: Arc<Fork>,
-}
-
-impl PartialEq for PhilosopherState {
-    fn eq(&self, other: &Self) -> bool {
-        *self == *other
-    }
 }
 
 impl Philosopher {
@@ -42,6 +39,7 @@ impl Philosopher {
             name: name.to_string(),
             state: Mutex::from(PhilosopherState::Thinking),
             stomach_capacity: Mutex::from(stomach_capacity),
+            capacity: stomach_capacity as f32,
             turn_time,
             left_fork,
             right_fork,
@@ -67,9 +65,12 @@ impl Philosopher {
         println!("{} picked second fork {}", self.name, second_fork.id);
 
         *self.state.lock().unwrap() =  PhilosopherState::Eating;
-        println!("{} is eating", self.name);
-
-        *self.stomach_capacity.lock().unwrap() -= 1 * self.turn_time;
+        let current_capacity = *self.stomach_capacity.lock().unwrap();
+        let percentage_full = (current_capacity as f32 / self.capacity) * 100.0;
+        println!("{} is eating: {}% hungry", self.name, percentage_full);
+        let current_capacity = current_capacity as i32 - 1 * self.turn_time as i32;
+        let current_capacity = if current_capacity < 0 { 0 } else { current_capacity };
+        *self.stomach_capacity.lock().unwrap() = current_capacity as usize;
         sleep(Duration::from_micros(self.turn_time as u64));
         println!("{} releasing first fork {}", self.name, first_fork.id);
         println!("{} releasing second fork {}", self.name, second_fork.id);
@@ -99,5 +100,21 @@ impl Philosopher {
             Err(_) => false,
         };
         left_fork && right_fork
+    }
+}
+
+impl Eq for Philosopher{
+
+}
+
+impl PartialEq for Philosopher {
+    fn eq(&self, other: &Self) -> bool {
+        self.name == other.name
+    }
+}
+
+impl Hash for Philosopher {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.name.hash(state);
     }
 }
