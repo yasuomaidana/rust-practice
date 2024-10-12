@@ -1,4 +1,3 @@
-use std::fmt::Debug;
 use csv::{Writer, Reader};
 
 fn main() {
