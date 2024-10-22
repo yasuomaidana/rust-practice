@@ -8,4 +8,4 @@ file_reader = { path = "./file_reader" }
 color-string = {path = "./color-string"}
 
 [workspace]
-members = ["file_reader", "color-string", "custom-maths", "square-integrator", "parabola-volume", "partial-pressure"]
+members = ["file_reader", "color-string", "custom-maths", "square-integrator", "parabola-volume", "partial-pressure", "pipe-twist"]

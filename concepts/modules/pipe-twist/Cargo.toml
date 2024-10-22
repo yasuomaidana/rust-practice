@@ -1,0 +1,7 @@
+[package]
+name = "pipe-twist"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+custom-maths = { path = "../custom-maths" }
