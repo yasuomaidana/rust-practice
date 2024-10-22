@@ -7,6 +7,7 @@
       <sourceFolder url="file://$MODULE_DIR$/custom-maths/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/file_reader/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/parabola-volume/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/partial-pressure/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/square-integrator/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
