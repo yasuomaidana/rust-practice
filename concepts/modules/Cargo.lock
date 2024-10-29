@@ -11,6 +11,10 @@ name = "color-string"
 version = "0.1.0"
 
 [[package]]
+name = "compression-easy"
+version = "0.1.0"
+
+[[package]]
 name = "custom-maths"
 version = "0.1.0"
 
