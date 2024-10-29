@@ -3,6 +3,10 @@
 version = 3
 
 [[package]]
+name = "aluminium-sulfuric-acid"
+version = "0.1.0"
+
+[[package]]
 name = "color-string"
 version = "0.1.0"
 

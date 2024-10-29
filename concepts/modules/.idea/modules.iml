@@ -12,6 +12,7 @@
       <sourceFolder url="file://$MODULE_DIR$/square-integrator/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/levenshtein-distance/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/aluminium-sulfuric-acid/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/hethanol-oxygen-reaction/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
