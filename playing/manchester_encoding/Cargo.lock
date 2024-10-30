@@ -3,6 +3,13 @@
 version = 3
 
 [[package]]
+name = "encoder"
+version = "0.1.0"
+dependencies = [
+ "reader",
+]
+
+[[package]]
 name = "manchester_encoding"
 version = "0.1.0"
 

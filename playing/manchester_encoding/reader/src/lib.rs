@@ -15,7 +15,7 @@ where
     buf.lines().collect()
 }
 
-pub(crate) fn delete_file<P>(filename: P) -> io::Result<()>
+pub fn delete_file<P>(filename: P) -> io::Result<()>
 where
     P: AsRef<Path>,
 {

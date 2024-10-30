@@ -4,7 +4,7 @@ pub trait ReadData {
     fn read_data(&mut self) -> Option<char>;
 }
 
-struct FileReader {
+pub struct FileReader {
     string_buffer: Vec<String>,
     current_chars: Vec<char>,
     new_line: bool,
@@ -12,7 +12,7 @@ struct FileReader {
 }
 
 impl FileReader {
-    fn new(file_name: String) -> Self {
+    pub fn new(file_name: String) -> Self {
         FileReader {
             string_buffer: read_lines(file_name).unwrap(),
             current_chars: vec![],
@@ -74,5 +74,7 @@ mod tests {
         assert_eq!(file_reader.read_data().unwrap(), 'y');
         assert_eq!(file_reader.read_data().unwrap(), 'e');
         assert_eq!(file_reader.read_data(), None);
+
+        delete_file("text.txt").unwrap()
     }
 }
