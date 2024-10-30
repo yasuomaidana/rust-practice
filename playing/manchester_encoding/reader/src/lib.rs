@@ -1,5 +1,5 @@
 
-mod reader;
+pub mod reader;
 
 use std::fs::File;
 use std::io::{self, BufRead};
@@ -22,7 +22,7 @@ where
     std::fs::remove_file(filename)
 }
 
-fn char_to_binary(c: char) -> String {
+pub fn char_to_binary(c: char) -> String {
     format!("{:b}", c as u32)
 }
 

@@ -1,6 +1,6 @@
 use crate::read_lines;
 
-trait ReadData {
+pub trait ReadData {
     fn read_data(&mut self) -> Option<char>;
 }
 
