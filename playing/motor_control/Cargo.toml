@@ -3,4 +3,11 @@ name = "motor_control"
 version = "0.1.0"
 edition = "2021"
 
+[workspace]
+members = ["synchronous-motor"]
+
 [dependencies]
+nalgebra = "0.33.2"
+
+[workspace.dependencies]
+nalgebra = "0.33.2"
