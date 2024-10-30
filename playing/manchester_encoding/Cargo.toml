@@ -1,0 +1,11 @@
+[package]
+name = "manchester_encoding"
+version = "0.1.0"
+edition = "2021"
+
+[workspace]
+members = ["reader"]
+
+[workspace.dependencies]
+
+[dependencies]
