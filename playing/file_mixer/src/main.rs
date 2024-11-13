@@ -13,19 +13,23 @@ struct Cli {
     search_string: String,
 }
 
-fn split_keep<'a>(r: &Regex, text: &'a str) -> Vec<&'a str> {
+fn split_keep(r: &Regex, text: &str) -> Vec<String> {
     let mut result = Vec::new();
     let mut last = 0;
-    for (index, matched) in text.match_indices(r.as_str()) {
-        if last != index {
-            result.push(&text[last..index]);
+    let mut first = true;
+    for mat in r.find_iter(text) {
+        let review = &text[last..mat.start()];
+        if first {
+            first = false;
+            continue;
         }
-        result.push(matched);
-        last = index + matched.len();
+        result.push(review.to_string());
+        last = mat.start();
     }
     if last < text.len() {
-        result.push(&text[last..]);
+        result.push(text[last..].to_string());
     }
+
     result
 }
 
@@ -36,8 +40,7 @@ fn main() {
     let separator = args.search_string;
     let separator = format!("{separator}\\w+:");
     let re = Regex::new(&separator).unwrap();
-    let mut reviews:Vec<&str> = split_keep(&re, &file_content);
-
+    let mut reviews:Vec<String> = split_keep(&re, &file_content);
     let mut rng = rand::thread_rng();
     reviews.shuffle(&mut rng);
     for review in reviews {
