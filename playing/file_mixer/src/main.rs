@@ -35,16 +35,16 @@ fn split_keep(r: &Regex, text: &str) -> Vec<String> {
 
 fn main() {
     let args = Cli::parse();
-    let file_name = args.file_name;
-    let file_content = std::fs::read_to_string(file_name).unwrap();
-    let separator = args.search_string;
-    let separator = format!("{separator}\\w+:");
+
+    let file_content = std::fs::read_to_string(args.file_name).unwrap();
+    let separator = format!("{}\\w+:",args.search_string);
+
     let re = Regex::new(&separator).unwrap();
     let mut reviews:Vec<String> = split_keep(&re, &file_content);
     let mut rng = rand::thread_rng();
     reviews.shuffle(&mut rng);
-    for review in reviews {
-        println!("{}", review);
-    }
 
+    for review in reviews {
+        print!("{}", review);
+    }
 }
