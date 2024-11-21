@@ -1,7 +1,7 @@
 use std::thread;
 use tokenizers::Tokenizer;
 
-async fn tokenize_text(pretrained_model: String, text: String) -> Vec<String> {
+pub async fn tokenize_text(pretrained_model: String, text: String) -> Vec<String> {
     // create a thread to load the tokenizer because this is a blocking call that makes actix panic
     let handle = thread::spawn(move || {
         // create the tokenizer
@@ -22,5 +22,5 @@ async fn tokenize_text(pretrained_model: String, text: String) -> Vec<String> {
     let tokens = encoded.get_tokens();
     let tokenized_values = Vec::from(tokens);
 
-    return tokenized_values;
+    tokenized_values
 }

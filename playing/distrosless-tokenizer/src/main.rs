@@ -2,20 +2,19 @@
 #[macro_use] extern crate rocket;
 use rocket::serde::json::Json;
 use distrosless_tokenizer::dto::data::Text;
+use distrosless_tokenizer::tokenize::tokenize_text;
 
 #[get("/")]
 fn index() -> &'static str {
-    "Hello, world!"
+    "Summarization API"
 }
 
 #[post("/tokenizers/<pretrained_model>", data="<text>")]
-fn tokenize(pretrained_model: &str, text: Json<Text>) -> String{
-    let mut return_text:String = String::new();
-    let str1 = format!("Tokenizing text using the model: {}", pretrained_model);
-    return_text.push_str(&str1);
-    let str2 = format!("\nText: {}", text.text);
-    return_text.push_str(&str2);
-    return_text
+async fn tokenize(pretrained_model: &str, text: Json<Text>) -> String{
+
+    let tokenized_text = tokenize_text(pretrained_model.to_string(), text.text.clone());
+    let tokenized_text = tokenized_text.await.join(" ");
+    tokenized_text
 }
 
 #[launch]
