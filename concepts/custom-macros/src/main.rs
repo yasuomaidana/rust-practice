@@ -1,5 +1,6 @@
 #[macro_use] mod macros;
-mod printer;
+#[macro_use] mod printer;
+// mod printer;
 
 create_function!(foo);
 create_function!(bar);
@@ -33,4 +34,12 @@ fn main() {
     println!("x is {:?}", x);
     println!("y is {:?}", y);
     println!("z is {:?}", z);
+
+    let a = create_printer!("hp-z800");
+    let b = create_printer!("hp-z800", "2A");
+    let c = create_printer!("hp-z800", "2A", "WiFi");
+
+    println!("Printer A: {} - {} - {}", a.name, a.model, a.connection_type);
+    println!("Printer B: {} - {} - {}", b.name, b.model, b.connection_type);
+    println!("Printer C: {} - {} - {}", c.name, c.model, c.connection_type);
 }
