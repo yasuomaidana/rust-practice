@@ -1,4 +1,5 @@
 #[macro_use] mod macros;
+mod printer;
 
 create_function!(foo);
 create_function!(bar);
