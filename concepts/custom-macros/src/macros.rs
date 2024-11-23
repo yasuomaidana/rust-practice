@@ -18,3 +18,10 @@ macro_rules! create_function {
         }
     };
 }
+
+macro_rules! print_result {
+    ($expression:expr) => {
+        // The stringify! macro is used to convert the expression given as an argument into a string.
+        println!("{:?} = {:?}", stringify!($expression), $expression);
+    };
+}
