@@ -1,6 +1,7 @@
 use rocket::tokio;
 use std::path::PathBuf;
-use tracing::{info, warn, debug};
+// use tracing::{info, warn, debug};
+use log::{info, warn, debug};
 
 #[get("/image/<filename..>")]
 pub(crate) async fn image(filename: PathBuf) -> Option<tokio::fs::File> {
