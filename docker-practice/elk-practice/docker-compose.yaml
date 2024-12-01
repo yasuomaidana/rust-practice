@@ -1,0 +1,27 @@
+version: '3'
+services:
+  elastic-search:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.16.1
+    container_name: elastic-search
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      - elastic-network
+  verify-elasticsearch:
+    image: alpine:latest
+    container_name: verify-elasticsearch
+    entrypoint: /bin/sh -c |
+      apk add --no-cache wget cosign &&
+      wget https://artifacts.elastic.co/cosign.pub &&
+      cosign verify --key cosign.pub docker.elastic.co/elasticsearch/elasticsearch:8.16.1
+    networks:
+      - elastic-network
+networks:
+  elastic-network:
+    driver: bridge
