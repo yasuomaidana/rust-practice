@@ -1,3 +1,6 @@
+mod files_scope;
+
+use crate::files_scope::files;
 use actix_files::NamedFile;
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 use log::info;
@@ -47,15 +50,7 @@ async fn main() -> std::io::Result<()> {
                 "/hey",
                 web::get().to(|| func_wrapper("Hey there!".to_string())),
             )
-            .service(
-                web::scope("/files")
-                    .service(app_index)
-                    .route("", web::get().to(manual_index))
-                    /// Serve static files from the /public directory
-                    /// To access this file, go to http://localhost:8080/public/"filename"
-                    /// it will serve the file from the static directory
-                    .service(actix_files::Files::new("/public", "./static").show_files_listing())
-            )
+            .service(files())
     })
     .bind(("127.0.0.1", 8080))?
     .run()
