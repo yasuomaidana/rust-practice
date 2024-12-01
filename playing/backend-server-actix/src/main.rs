@@ -15,8 +15,8 @@ async fn manual_hello(message: String) -> impl Responder {
     HttpResponse::Ok().body(message)
 }
 
-fn func_wrapper() -> impl Future<Output=impl Responder> {
-    manual_hello("Hey there!".to_string())
+fn func_wrapper(message: String) -> impl Future<Output = impl Responder> {
+    manual_hello(message)
 }
 
 #[actix_web::main]
@@ -25,7 +25,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(hello)
             .service(echo)
-            .route("/hey", web::get().to(func_wrapper))
+            .route("/hey", web::get().to(|| func_wrapper("Hey there!".to_string())))
     })
         .bind(("127.0.0.1", 8080))?
         .run()
