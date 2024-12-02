@@ -4,7 +4,7 @@ mod utils;
 
 use crate::endpoint_examples::scopes_example::files;
 use crate::endpoint_examples::simple_endpoints::*;
-use crate::states_example::states_endpoints::{state_endpoints};
+use crate::states_example::states_endpoints::state_endpoints;
 use actix_web::{App, HttpServer};
 
 #[actix_web::main]
