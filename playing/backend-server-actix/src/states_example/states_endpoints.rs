@@ -43,7 +43,7 @@ pub async fn second_bye_put(message: web::Data<StringData>) -> impl Responder {
 }
 
 pub fn state_endpoints() -> Scope {
-    let scope = web::scope("")
+    let scope = web::scope("/states")
         .service(manual_message_factory("/hey", "Hey there!".to_string()))
         .service(manual_message_factory("/bye", "Bye bye!".to_string()));
     let message = StringData {
