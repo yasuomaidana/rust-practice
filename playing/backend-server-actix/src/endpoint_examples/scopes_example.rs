@@ -1,10 +1,12 @@
+use crate::add_into_scope;
+use crate::endpoint_examples::files_endpoints::single_files::{app_index_file, manual_index_file};
 use actix_web::{web, Scope};
-use crate::endpoint_examples::files_endpoints::single_files::app_index;
 
 pub fn files() -> Scope {
-    web::scope("/files")
-        .service(app_index)
-        .route("", web::get().to(crate::endpoint_examples::files_endpoints::single_files::manual_index))
+    let scope = web::scope("/files");
+    let scope = add_into_scope!(scope, app_index_file);
+    let scope = add_into_scope!(scope, web::get, "", manual_index_file);
+    scope
         /*
         /// Serve static files from the /public directory
         /// To access this file, go to http://localhost:8080/public/Filename

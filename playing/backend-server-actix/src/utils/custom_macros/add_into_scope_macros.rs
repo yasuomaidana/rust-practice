@@ -55,13 +55,13 @@ mod tests {
         let message = "Hello world!";
         HttpResponse::Ok().body(message)
     }
-    
+
     #[get("/")]
     pub async fn path_3() -> impl Responder {
         let message = "Hello world!";
         HttpResponse::Ok().body(message)
     }
-    
+
     #[get("/2")]
     pub async fn path_4() -> impl Responder {
         let message = "Hello world!";
@@ -74,14 +74,12 @@ mod tests {
         let _scope = add_into_scope!(scope, web::get, "/path_1", path_1);
     }
 
-     
     #[test]
     fn test_add_into_scope_multiple() {
         let scope = web::scope("");
         // this works for ($scope:expr,$method:expr, ($( $path:expr ),+), [$( $func:ident ),+])
         // let _expanded = add_into_scope!(scope, web::get, ("/path_1", "/path_2"), [path_1, path_2]);
         let _expanded = add_into_scope!(scope, web::get, ("/path_1", "/path_2"), (path_1, path_2));
-        
     }
 
     #[test]
