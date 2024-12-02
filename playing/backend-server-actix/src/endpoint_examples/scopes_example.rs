@@ -9,8 +9,10 @@ pub fn files() -> Scope {
     scope
         /*
         /// Serve static files from the /public directory
-        /// To access this file, go to http://localhost:8080/public/Filename
+        /// To access this file, go to http://localhost:8080/files/public/Filename
         /// it will serve the file from the static directory
          */
-        .service(actix_files::Files::new("/public", "./static").show_files_listing())
+        //.service(actix_files::Files::new("/public", "./static").show_files_listing()) -> http://localhost:8080/files/public/Filename
+        // http://localhost:8080/files/Filename
+        .service(actix_files::Files::new("/", "./static").show_files_listing())
 }
