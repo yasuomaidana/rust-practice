@@ -4,6 +4,8 @@
 /// # Examples
 ///
 /// ```
+/// use actix_web::{get, web, HttpResponse, Responder};
+///
 /// pub async fn path_1() -> impl Responder {
 ///     let message = "Hello world!";
 ///     HttpResponse::Ok().body(message)
@@ -14,9 +16,23 @@
 ///     HttpResponse::Ok().body(message)
 /// }
 ///
+/// #[get("/")]
+/// pub async fn path_3() -> impl Responder {
+///     let message = "Hello world!";
+///     HttpResponse::Ok().body(message)
+/// }
+///
+/// #[get("/2")]
+/// pub async fn path_4() -> impl Responder {
+///     let message = "Hello world!";
+///     HttpResponse::Ok().body(message)
+/// }
+///
 /// let scope = web::scope("");
 /// let _scope = add_into_scope!(scope, web::get, "/path_1", path_1);
-/// let _expanded = add_into_scope!(scope, web::get, ("/path_1", "/path_2"), [path_1, path_2]);
+/// let _expanded = add_into_scope!(scope, web::get, ("/path_1", "/path_2"), (path_1, path_2));
+/// let _scope = add_into_scope!(scope, path_3);
+/// let _scope = add_into_scope!(scope, (path_3, path_4));
 /// ```
 macro_rules! add_into_scope {
 
