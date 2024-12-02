@@ -1,6 +1,6 @@
-use actix_web::{get, web, HttpResponse, Responder, Scope};
+use crate::{add_into_scope, add_into_scope_with_inmutable_struct_data,add_struct_data_into_scope};
+use actix_web::{get, put, web, HttpResponse, Responder, Scope};
 use log::info;
-use crate::add_path_with_data;
 
 pub struct StringData {
     pub message: String,
@@ -13,9 +13,12 @@ pub async fn manual_message(message: web::Data<StringData>) -> impl Responder {
 }
 
 pub fn manual_message_factory(path: &str, message: String) -> Scope {
-    web::scope(path)
-        .app_data(web::Data::new(StringData { message }))
-        .route("", web::get().to(manual_message))
+    add_into_scope!(
+        web::scope(path).app_data(web::Data::new(StringData { message })),
+        web::get,
+        "",
+        manual_message
+    )
 }
 
 #[get("/buu")]
@@ -25,9 +28,36 @@ pub async fn buu(message: web::Data<StringData>) -> impl Responder {
     HttpResponse::Ok().body(message)
 }
 
+#[get("/bye-bye")]
+pub async fn second_bye(message: web::Data<StringData>) -> impl Responder {
+    let message = message.message.to_string();
+    info!("Request get received: {}", message);
+    HttpResponse::Ok().body(message)
+}
+
+#[put("/bye-bye")]
+pub async fn second_bye_put(message: web::Data<StringData>) -> impl Responder {
+    let message = message.message.to_string();
+    info!("Request put received: {}", message);
+    HttpResponse::Ok().body(message)
+}
+
 pub fn state_endpoints() -> Scope {
-    web::scope("")
+    let scope = web::scope("")
         .service(manual_message_factory("/hey", "Hey there!".to_string()))
-        .service(manual_message_factory("/bye", "Bye bye!".to_string()))
-        .service(add_path_with_data!(buu, StringData { message: "Hello world! buu".to_string() }))
+        .service(manual_message_factory("/bye", "Bye bye!".to_string()));
+    let message = StringData {
+        message: "Hello world!".to_string(),
+    };
+    add_into_scope_with_inmutable_struct_data!(scope, message, buu)
+        // .service(add_into_scope_with_inmutable_data!(
+        //     buu,
+        //     StringData {
+        //         message: "Hello world! buu".to_string()
+        //     }
+        // ))
+    // .service(
+    //     add_to_scope!(
+    //         (second_bye, second_bye_put),
+    //         StringData { message: "Hello world! second bye".to_string() }))
 }
