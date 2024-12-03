@@ -39,7 +39,7 @@ pub async fn second_bye(message: web::Data<StringData>) -> impl Responder {
 pub async fn second_bye_put(message: web::Data<StringData>) -> impl Responder {
     let message = message.message.to_string();
     info!("Request put received: {}", message);
-    HttpResponse::Ok().body(message)
+    HttpResponse::Ok().body(format!("{} (PUT)", message))
 }
 
 pub fn state_endpoints() -> Scope {
@@ -49,15 +49,11 @@ pub fn state_endpoints() -> Scope {
     let message = StringData {
         message: "Hello world!".to_string(),
     };
-    add_into_scope_with_inmutable_struct_data!(scope, message, buu)
-        // .service(add_into_scope_with_inmutable_data!(
-        //     buu,
-        //     StringData {
-        //         message: "Hello world! buu".to_string()
-        //     }
-        // ))
-    // .service(
-    //     add_to_scope!(
-    //         (second_bye, second_bye_put),
-    //         StringData { message: "Hello world! second bye".to_string() }))
+    let scope = add_into_scope_with_inmutable_struct_data!(scope, message, buu);
+
+    let message = StringData {
+        message: "Bye endpoint message".to_string(),
+    };
+    
+    add_into_scope_with_inmutable_struct_data!(scope, message, (second_bye,second_bye_put))
 }
