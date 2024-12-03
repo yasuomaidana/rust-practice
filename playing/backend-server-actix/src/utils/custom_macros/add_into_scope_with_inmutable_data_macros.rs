@@ -65,7 +65,7 @@ mod tests {
         let data_2 = StringData {
             message: "Hello world!".to_string(),
         };
-        let scope = add_into_scope_with_inmutable_struct_data!(scope, (data,data_2), path_3);
+        let _scope = add_into_scope_with_inmutable_struct_data!(scope, (data,data_2), path_3);
     }
 
     #[test]
@@ -77,7 +77,7 @@ mod tests {
         let data_2 = StringData {
             message: "Hello world!".to_string(),
         };
-        let scope = add_into_scope_with_inmutable_struct_data!(scope, (data,data_2), 
+        let _scope = add_into_scope_with_inmutable_struct_data!(scope, (data,data_2), 
             (path_3, path_4));
     }
 
@@ -88,7 +88,7 @@ mod tests {
             message: "Hello world!".to_string(),
         };
         
-        let scope = add_into_scope_with_inmutable_struct_data!(scope, data, 
+        let _scope = add_into_scope_with_inmutable_struct_data!(scope, data, 
             (path_3, path_4));
     }
     
