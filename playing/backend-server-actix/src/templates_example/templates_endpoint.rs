@@ -1,10 +1,7 @@
 use actix_web::{get, web, Responder};
 use handlebars::{DirectorySourceOptions, Handlebars};
 use serde::{Deserialize, Serialize};
-
-use crate::{
-    add_into_scope, add_into_scope_with_mutable_struct_data, add_mutable_struct_data_into_scope,
-};
+use crate::*;
 
 #[derive(Serialize, Deserialize)]
 struct UserData {
