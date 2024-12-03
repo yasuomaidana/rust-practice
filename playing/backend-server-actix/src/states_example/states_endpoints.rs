@@ -1,11 +1,11 @@
-use std::sync::Mutex;
-use crate::{add_into_scope, 
-            add_into_scope_with_inmutable_struct_data, 
-            add_into_scope_with_mutable_struct_data, 
-            add_struct_data_into_scope,
-            add_mutable_struct_data_into_scope};
+use crate::{
+    add_into_scope, add_into_scope_with_inmutable_struct_data,
+    add_into_scope_with_mutable_struct_data, add_mutable_struct_data_into_scope,
+    add_struct_data_into_scope,
+};
 use actix_web::{get, put, web, HttpResponse, Responder, Scope};
 use log::info;
+use std::sync::Mutex;
 
 pub struct StringData {
     pub message: String,
@@ -47,7 +47,6 @@ pub async fn second_bye_put(message: web::Data<StringData>) -> impl Responder {
     HttpResponse::Ok().body(format!("{} (PUT)", message))
 }
 
-
 struct Counter {
     count: Mutex<i32>,
 }
@@ -56,7 +55,10 @@ struct Counter {
 pub async fn counter(counter: web::Data<Counter>) -> impl Responder {
     let mut count = counter.count.lock().unwrap();
     *count += 1;
-    let message = format!("You have visited this endpoint {count} times", count = *count);
+    let message = format!(
+        "You have visited this endpoint {count} times",
+        count = *count
+    );
     HttpResponse::Ok().body(message)
 }
 
@@ -72,12 +74,13 @@ pub fn state_endpoints() -> Scope {
     let message = StringData {
         message: "Bye endpoint message".to_string(),
     };
-    
-    let scope = add_into_scope_with_inmutable_struct_data!(scope, message, (second_bye,second_bye_put));
-    
+
+    let scope =
+        add_into_scope_with_inmutable_struct_data!(scope, message, (second_bye, second_bye_put));
+
     let counter_data = web::Data::new(Counter {
         count: Mutex::new(0),
     });
-    
+
     add_into_scope_with_mutable_struct_data!(scope, counter_data, counter)
 }
