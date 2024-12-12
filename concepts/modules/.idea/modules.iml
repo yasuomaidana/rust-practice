@@ -17,6 +17,7 @@
       <sourceFolder url="file://$MODULE_DIR$/hethanol-oxygen-reaction/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/momentum-preserve/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/vector-sum/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/file-system-crawler/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

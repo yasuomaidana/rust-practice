@@ -8,4 +8,12 @@ file_reader = { path = "./file_reader" }
 color-string = {path = "./color-string"}
 
 [workspace]
-members = ["file_reader", "color-string", "custom-maths", "square-integrator", "parabola-volume", "partial-pressure", "pipe-twist", "levenshtein-distance", "hethanol-oxygen-reaction", "aluminium-sulfuric-acid", "vector-sum", "momentum-preserve", "compression-easy"]
+members = ["file_reader", "color-string", "custom-maths", "square-integrator", "parabola-volume", "partial-pressure", "pipe-twist", "levenshtein-distance", "hethanol-oxygen-reaction", "aluminium-sulfuric-acid", "vector-sum", "momentum-preserve", "compression-easy", "file-system-crawler"]
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "file-crawler"
+path = "file-system-crawler/src/main.rs"
