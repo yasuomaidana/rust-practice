@@ -35,6 +35,10 @@ name = "levenshtein-distance"
 version = "0.1.0"
 
 [[package]]
+name = "log-parser"
+version = "0.1.0"
+
+[[package]]
 name = "modules"
 version = "0.1.0"
 dependencies = [
