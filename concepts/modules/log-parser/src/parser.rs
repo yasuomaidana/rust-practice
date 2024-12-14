@@ -1,9 +1,22 @@
 use flate2::read::GzDecoder;
-use std::fs::File;
 use regex::Regex;
+use std::fs::File;
+use std::io::BufRead;
 
+fn get_reader(file_path: &str) -> Box<dyn std::io::BufRead> {
+    let file = File::open(file_path).unwrap();
+    match file_path.ends_with(".gz") {
+        true => {
+            let decompressor = GzDecoder::new(file);
+            Box::new(std::io::BufReader::new(decompressor))
+        }
+        false => Box::new(std::io::BufReader::new(file)),
+    }
+}
 
 pub fn read_buffer(file_path: &str) {
+    let reader = get_reader(file_path);
+
     // Initialize variables for error rate calculation.
     let mut total_entries = 0;
     let mut error_entries = 0;
@@ -11,17 +24,6 @@ pub fn read_buffer(file_path: &str) {
 
     let timestamp_regex = Regex::new(r"(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}-\d{2})").unwrap();
     let error_keyword = "Error";
-    let file = File::open(file_path).unwrap();
-    use std::io::{BufRead, BufReader};
-
-    let reader: Box<dyn BufRead> = match file_path.ends_with(".gz") {
-        true => {
-            // Decompress gzipped file.
-            let decompressor = GzDecoder::new(file);
-            Box::new(BufReader::new(decompressor))
-        }
-        false => Box::new(BufReader::new(file)),
-    };
 
     for line in reader.lines() {
         let line = match line {
@@ -58,6 +60,5 @@ pub fn read_buffer(file_path: &str) {
             }
         }
     }
-
     println!("Total error count for current log: {total_entries}");
 }
