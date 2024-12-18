@@ -19,6 +19,8 @@
       <sourceFolder url="file://$MODULE_DIR$/vector-sum/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/file-system-crawler/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/log-parser/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/command-runner/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/cubic-container-leak/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

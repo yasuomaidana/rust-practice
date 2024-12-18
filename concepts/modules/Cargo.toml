@@ -8,7 +8,7 @@ file_reader = { path = "./file_reader" }
 color-string = {path = "./color-string"}
 
 [workspace]
-members = ["file_reader", "color-string", "custom-maths", "square-integrator", "parabola-volume", "partial-pressure", "pipe-twist", "levenshtein-distance", "hethanol-oxygen-reaction", "aluminium-sulfuric-acid", "vector-sum", "momentum-preserve", "compression-easy", "file-system-crawler", "log-parser"]
+members = ["file_reader", "color-string", "custom-maths", "square-integrator", "parabola-volume", "partial-pressure", "pipe-twist", "levenshtein-distance", "hethanol-oxygen-reaction", "aluminium-sulfuric-acid", "vector-sum", "momentum-preserve", "compression-easy", "file-system-crawler", "log-parser", "command-runner"]
 
 [[bin]]
 name = "main"
