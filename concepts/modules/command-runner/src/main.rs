@@ -2,6 +2,7 @@ use std::process::Command;
 fn main() {
     let output = Command::new("ls")
         .arg("-l")
+        //.args(&["-a", "-h"])
         .output()
         .expect("failed to execute process");
     println!("status: {}", output.status);
