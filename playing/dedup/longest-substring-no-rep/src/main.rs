@@ -1,21 +1,13 @@
-use std::collections::HashMap;
-
 pub fn length_of_longest_substring(s: String) -> i32 {
-    let mut max = 0;
-    let mut tail = 0;
-    let mut head = 0;
-    let mut tails = HashMap::new();
-    let chars: Vec<char> = s.chars().collect();
-    while head < chars.len() {
-        if tails.contains_key(&chars[head]) {
-            tail = tail.max(tails.remove(&chars[head]).or_else(|| Some(0)).unwrap() + 1);
-        } else {
-            tails.insert(chars[head], head);
-            max = max.max(head - tail + 1);
-            head += 1;
-        }
+    let mut max_length = 0;
+    let mut char_index = [0; 128]; // ASCII characters
+    let mut start = 0;
+    for (i, c) in s.chars().enumerate() {
+        start = start.max(char_index[c as usize]);
+        char_index[c as usize] = i + 1; // Update the last seen index of the character
+        max_length = max_length.max(i - start + 1);
     }
-    max as i32
+    max_length as i32
 }
 fn main() {
     let s = "abba".to_string();
