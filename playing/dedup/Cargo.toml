@@ -8,3 +8,7 @@ edition = "2024"
 [[bin]]
 name = "add-two-numbers"
 path = "add-two-numbers/src/main.rs"
+
+[[bin]]
+name = "longest-substring-without-repeating-characters"
+path = "longest-substring-no-rep/src/main.rs"
