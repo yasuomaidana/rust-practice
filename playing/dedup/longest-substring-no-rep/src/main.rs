@@ -1,23 +1,24 @@
-use std::collections::HashSet;
+use std::collections::HashMap;
 
 pub fn length_of_longest_substring(s: String) -> i32 {
     let mut max = 0;
     let mut tail = 0;
     let mut head = 0;
-    let mut using_chars: HashSet<char> = HashSet::new();
+    let mut tails = HashMap::new();
     let chars: Vec<char> = s.chars().collect();
     while head < chars.len() {
-        if !using_chars.contains(&chars[head]) {
-            using_chars.insert(chars[head]);
-            max = max.max((head - tail + 1) as i32);
-            head += 1;
+        if tails.contains_key(&chars[head]) {
+            tail = tail.max(tails.remove(&chars[head]).or_else(|| Some(0)).unwrap() + 1);
         } else {
-            using_chars.remove(&chars[tail]);
-            tail += 1;
+            tails.insert(chars[head], head);
+            max = max.max(head - tail + 1);
+            head += 1;
         }
     }
-    max
+    max as i32
 }
 fn main() {
-    println!("Hello, world!");
+    let s = "abba".to_string();
+    let result = length_of_longest_substring(s);
+    println!("{}", result);
 }
