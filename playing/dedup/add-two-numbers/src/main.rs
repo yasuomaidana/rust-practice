@@ -2,39 +2,35 @@ use crate::list_node::ListNode;
 
 mod list_node;
 
-fn list_node_to_vec(node: &Option<Box<ListNode>>) -> Vec<i32> {
-    let mut vec = Vec::new();
-    let mut current = node;
-    while let Some(n) = current {
-        vec.push(n.val);
-        current = &n.next;
-    }
-    vec
-}
-
 pub fn add_two_numbers(
     l1: Option<Box<ListNode>>,
     l2: Option<Box<ListNode>>,
 ) -> Option<Box<ListNode>> {
     let mut carry = 0;
-    let mut stack1 = list_node_to_vec(&l1);
-    let mut stack2 = list_node_to_vec(&l2);
-    let mut result = std::collections::VecDeque::new();
-
-    while !stack1.is_empty() || !stack2.is_empty() || carry > 0 {
-        let sum = carry + stack1.pop().unwrap_or(0) + stack2.pop().unwrap_or(0);
+    let mut result_node = ListNode::new(0);
+    let mut work_node = &mut result_node;
+    let mut wl1 = l1;
+    let mut wl2 = l2;
+    while wl1.is_some() || wl2.is_some() || carry > 0 {
+        let val1 = wl1.as_ref().map_or(0, |n| n.val);
+        let val2 = wl2.as_ref().map_or(0, |n| n.val);
+        let sum = val1 + val2 + carry;
         carry = sum / 10;
-        let digit = sum % 10;
+        work_node.val = sum % 10;
 
-        // Push the digit onto the result stack
-        result.push_back(digit);
-        // result.push(digit); // Using stack1 to store the result for simplicity
-    }
-    let mut result_node = ListNode::new(result.pop_front().unwrap_or(0));
-    let mut current = &mut result_node;
-    while let Some(digit) = result.pop_front() {
-        current.next = Some(Box::new(ListNode::new(digit)));
-        current = current.next.as_mut().unwrap();
+        if wl1.is_some() {
+            wl1 = wl1.and_then(|n| n.next);
+        }
+        if wl2.is_some() {
+            wl2 = wl2.and_then(|n| n.next);
+        }
+
+        if wl1.is_some() || wl2.is_some() || carry > 0 {
+            work_node.next = Some(Box::new(ListNode::new(0)));
+            work_node = work_node.next.as_mut().unwrap();
+        } else {
+            work_node.next = None; // Ensure the last node does not point to a new node
+        }
     }
     Some(Box::new(result_node))
 }
